@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { hardhat } from "viem/chains";
-import { Home, Upload, User, Bug, Menu } from "lucide-react"
+import { Home, Upload, User, Bug, Menu, Info } from "lucide-react"
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick, useTargetNetwork } from "~~/hooks/scaffold-eth";
 
@@ -30,6 +30,11 @@ export const menuLinks: HeaderMenuLink[] = [
     label: "Profile",
     href: "/profile",
     icon: <User className="h-4 w-4" />,
+  },
+  {
+    label: "About",
+    href: "/about",
+    icon: <Info className="h-4 w-4" />,
   },
   {
     label: "Debug Contracts",
