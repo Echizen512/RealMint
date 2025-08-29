@@ -1,72 +1,156 @@
 "use client";
 
-import Link from "next/link";
-import type { NextPage } from "next";
-import { useAccount } from "wagmi";
-import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { Address } from "~~/components/scaffold-eth";
+import { useState, useMemo } from "react";
+import { Search } from "lucide-react";
+import { useScaffoldReadContract } from "~~/hooks/scaffold-eth/useScaffoldReadContract"
 
-const Home: NextPage = () => {
-  const { address: connectedAddress } = useAccount();
+const categories = ["All", "Real Estate", "Collectibles", "Commodities", "Vehicles", "Art"];
+
+export default function MarketplacePage() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [sortBy, setSortBy] = useState("price-low");
+
+  const { data: assets } = useScaffoldReadContract({
+    contractName: "RealMintMarketplace",
+    functionName: "getAllAssets",
+  });
+
+  const filteredAssets = useMemo(() => {
+    if (!assets) return [];
+
+    return assets
+      .filter(asset => {
+        const matchesSearch =
+          asset.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          asset.description.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesCategory = selectedCategory === "All" || asset.category === selectedCategory;
+        return matchesSearch && matchesCategory;
+      })
+      .sort((a, b) => {
+        switch (sortBy) {
+          case "price-low":
+            return Number(a.price) - Number(b.price);
+          case "price-high":
+            return Number(b.price) - Number(a.price);
+          case "name":
+            return a.title.localeCompare(b.title);
+          default:
+            return 0;
+        }
+      });
+  }, [assets, searchTerm, selectedCategory, sortBy]);
+
+  const formatPrice = (price: bigint) =>
+    new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(Number(price));
 
   return (
-    <>
-      <div className="flex items-center flex-col grow pt-10">
-        <div className="px-5">
-          <h1 className="text-center">
-            <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-4xl font-bold">Scaffold-ETH 2</span>
-          </h1>
-          <div className="flex justify-center items-center space-x-2 flex-col">
-            <p className="my-2 font-medium">Connected Address:</p>
-            <Address address={connectedAddress} />
-          </div>
-
-          <p className="text-center text-lg">
-            Get started by editing{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              packages/nextjs/app/page.tsx
-            </code>
-          </p>
-          <p className="text-center text-lg">
-            Edit your smart contract{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              YourContract.sol
-            </code>{" "}
-            in{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              packages/hardhat/contracts
-            </code>
-          </p>
+    <div className="min-h-screen bg-base-300 text-base-content">
+      <div className="container mx-auto px-6 py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2">Asset Marketplace</h1>
+          <p className="text-sm opacity-70">Discover and invest in tokenized real-world assets</p>
         </div>
 
-        <div className="grow bg-base-300 w-full mt-16 px-8 py-12">
-          <div className="flex justify-center items-center gap-12 flex-col md:flex-row">
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <BugAntIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Tinker with your smart contract using the{" "}
-                <Link href="/debug" passHref className="link">
-                  Debug Contracts
-                </Link>{" "}
-                tab.
-              </p>
-            </div>
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <MagnifyingGlassIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Explore your local transactions with the{" "}
-                <Link href="/blockexplorer" passHref className="link">
-                  Block Explorer
-                </Link>{" "}
-                tab.
-              </p>
-            </div>
+        {/* Search and Filters */}
+        <div className="flex flex-col lg:flex-row gap-4 mb-8">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 opacity-60 w-4 h-4" />
+            <input
+              type="text"
+              placeholder="Search assets..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="input input-bordered w-full pl-10"
+            />
           </div>
+
+          <div className="flex gap-2 flex-wrap">
+            {categories.map(category => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`btn btn-sm ${selectedCategory === category ? "btn-primary" : "btn-outline"}`}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+
+          <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="select select-bordered">
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="name">Name: A to Z</option>
+          </select>
         </div>
+
+        {/* Asset Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredAssets.map(asset => (
+            <div
+              key={Number(asset.id)}
+              className="rounded-box border border-base-300 bg-base-200 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.02] overflow-hidden"
+            >
+              <div className="relative">
+                <img src={asset.imageURI || "/placeholder.svg"} alt={asset.title} className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105" />
+                <div className="absolute top-3 left-3">
+                  <div className={`badge ${asset.isActive ? "badge-primary" : "badge-neutral"}`}>
+                    {asset.isActive ? "Available" : "Sold Out"}
+                  </div>
+                </div>
+                <div className="absolute top-3 right-3">
+                  <div className="badge badge-outline backdrop-blur-sm bg-base-100/80">
+                    {asset.category}
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4">
+                <h3 className="text-lg font-semibold mb-2 hover:text-primary transition-colors">
+                  {asset.title}
+                </h3>
+                <p className="text-sm opacity-70 mb-3 line-clamp-2">{asset.description}</p>
+                <div className="flex justify-between text-sm opacity-70 mb-3">
+                  <span>{asset.location}</span>
+                  <span>
+                    {Number(asset.tokensAvailable)}/{Number(asset.tokenSupply)} tokens
+                  </span>
+                </div>
+                <div className="flex justify-between items-end">
+                  <div>
+                    <div className="text-2xl font-bold text-success">{formatPrice(asset.price)}</div>
+                    <div className="text-xs opacity-70">USDC</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm font-medium">
+                      {((Number(asset.tokensAvailable) / Number(asset.tokenSupply)) * 100).toFixed(0)}%
+                    </div>
+                    <div className="text-xs opacity-70">Available</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4 pt-0">
+                <button className="btn btn-primary w-full" disabled={!asset.isActive}>
+                  {asset.isActive ? "Buy Tokens" : "Sold Out"}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {filteredAssets.length === 0 && (
+          <div className="text-center py-12">
+            <div className="text-lg opacity-70 mb-2">No assets found</div>
+            <div className="text-sm opacity-50">Try adjusting your search terms or filters</div>
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
-};
-
-export default Home;
+}
