@@ -1,13 +1,11 @@
 "use client";
 
-import { PackageSearch, DollarSign, ShieldCheck, Store, LineChart, Wallet } from "lucide-react";
 import { Coin3d } from "./Coin3d";
 import { CreateParticles } from "./CreateParticles";
 import { RainbowKitCustomConnectButton } from "./scaffold-eth";
 import GradientText from "./ui/GradientText";
 import RotatingText from "./ui/RotatingText";
-import { useEffect } from "react";
-import { useAccount } from "wagmi";
+import { DollarSign, LineChart, PackageSearch, ShieldCheck, Store, Wallet } from "lucide-react";
 
 const features = [
   { icon: Store, title: "Marketplace", desc: "Buy and sell tokenized real-world assets" },
@@ -19,9 +17,6 @@ const features = [
 ] as const;
 
 export const LandingPage = () => {
-  const { isConnected } = useAccount();
-
-
   return (
     <div className="relative min-h-screen overflow-hidden">
       <CreateParticles />
