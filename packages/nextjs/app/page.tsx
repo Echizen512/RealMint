@@ -150,12 +150,20 @@ export default function MarketplacePage() {
                   <button
                     className="btn btn-primary w-full"
                     disabled={!canBuy}
-                    onClick={() =>
-                      buyTokens({
-                        functionName: "buyTokens",
-                        args: [BigInt(asset.id), BigInt(1)],
-                      })
-                    }
+                    onClick={() => {
+                      const pricePerToken = asset.price / BigInt(asset.tokenSupply);
+                      const totalCost = pricePerToken * BigInt(1);
+
+                      buyTokens(
+                        {
+                          functionName: "buyTokens",
+                          args: [BigInt(asset.id), BigInt(1)],
+                        },
+                        {
+                          value: totalCost,
+                        }
+                      );
+                    }}
                   >
                     {canBuy ? "Buy Tokens" : isSeller ? "Your Asset" : "Sold Out"}
                   </button>
