@@ -19,16 +19,30 @@ contract RwaForge is Ownable {
         bool isActive;
     }
 
+    struct AssetPurchased {
+        uint256 purchaseID;
+        uint256 assetID;
+        address buyer;
+        string title;
+        string description;
+        string category;
+        string[] imageUris;
+        uint256 amount;
+    }
+
     //States
     uint256 public nextAssetId;
+    uint256 public purchaseID;
+
     mapping(uint256 => Asset) public assets;
     mapping(address => uint256[]) public assetsPublishedBy;
     mapping(address => mapping(uint256 => uint256)) public tokensOwnedByUser;
+    mapping(address => AssetPurchased[]) private purchasesByBuyer;
 
     //Events
-    event AssetPublished(uint256 indexed assetId, address indexed seller);
-    event TokensPurchased(uint256 indexed assetId, address indexed buyer, uint256 amount);
-    event AssetDeactivated(uint256 indexed assetId);
+    event AssetPublished(uint256 indexed _assetId, address indexed seller);
+    event AssetsPurchasedEvent(uint256 indexed _assetId, address indexed buyer, uint256 amount);
+    event AssetDeactivated(uint256 indexed _assetId);
 
     constructor() Ownable(msg.sender) {}
 
@@ -69,8 +83,8 @@ contract RwaForge is Ownable {
         nextAssetId++;
     }
 
-    function buyTokens(uint256 assetId, uint256 amount) external payable {
-        Asset storage asset = assets[assetId];
+    function buyTokens(uint256 _assetId, uint256 amount) external payable {
+        Asset storage asset = assets[_assetId];
         require(asset.seller != address(0), "Asset does not exist");
         require(asset.isActive, "Asset not active");
         require(amount > 0 && amount <= asset.tokensAvailable, "Invalid amount");
@@ -81,7 +95,6 @@ contract RwaForge is Ownable {
 
         require(msg.value == totalCost, "Incorrect ETH amount sent");
 
-        // Transfer ETH to the seller
         (bool sent, ) = asset.seller.call{ value: msg.value }("");
         require(sent, "ETH transfer failed");
 
@@ -89,33 +102,47 @@ contract RwaForge is Ownable {
 
         if (asset.tokensAvailable == 0) {
             asset.isActive = false;
-            emit AssetDeactivated(assetId);
+            emit AssetDeactivated(_assetId);
         }
 
-        emit TokensPurchased(assetId, msg.sender, amount);
+        emit AssetsPurchasedEvent(_assetId, msg.sender, amount);
 
-        tokensOwnedByUser[msg.sender][assetId] += amount;
+        tokensOwnedByUser[msg.sender][_assetId] += amount;
+        purchasesByBuyer[msg.sender].push(
+            AssetPurchased(
+                purchaseID,
+                _assetId,
+                msg.sender,
+                asset.title,
+                asset.description,
+                asset.category,
+                asset.imageURIs,
+                amount
+            )
+        );
+        purchaseID++;
     }
 
-    function getAsset(uint256 assetId) external view returns (Asset memory) {
-        require(assets[assetId].seller != address(0), "Asset does not exist");
-        return assets[assetId];
+    // === Getters ===
+    function getAsset(uint256 _assetId) external view returns (Asset memory) {
+        require(assets[_assetId].seller != address(0), "Asset does not exist");
+        return assets[_assetId];
     }
 
-    function getPricePerToken(uint256 assetId) external view returns (uint256) {
-        Asset memory asset = assets[assetId];
+    function getPricePerToken(uint256 _assetId) external view returns (uint256) {
+        Asset memory asset = assets[_assetId];
         require(asset.tokenSupply > 0, "Invalid token supply");
         return asset.price / asset.tokenSupply;
     }
 
-    function deactivateAsset(uint256 assetId) external {
-        Asset storage asset = assets[assetId];
+    function deactivateAsset(uint256 _assetId) external {
+        Asset storage asset = assets[_assetId];
         require(asset.seller != address(0), "Asset does not exist");
         require(msg.sender == asset.seller || msg.sender == owner(), "Not authorized");
         require(asset.isActive, "Asset already inactive");
 
         asset.isActive = false;
-        emit AssetDeactivated(assetId);
+        emit AssetDeactivated(_assetId);
     }
 
     function getAllAssets() external view returns (Asset[] memory) {
@@ -126,11 +153,21 @@ contract RwaForge is Ownable {
         return allAssets;
     }
 
-    function getPublishedAssets(address user) external view returns (uint256[] memory) {
-        return assetsPublishedBy[user];
+    function getAllPublishedAssets(address _publisher) external view returns (Asset[] memory) {
+        Asset[] memory allAssets = new Asset[](nextAssetId);
+        for (uint256 i = 0; i < nextAssetId; i++) {
+            if (assets[i].seller == _publisher) {
+                allAssets[i] = assets[i];
+            }
+        }
+        return allAssets;
     }
 
-    function getTokensOwnedByUser(address user, uint256 assetId) external view returns (uint256) {
-        return tokensOwnedByUser[user][assetId];
+    function getAllAssetsPurchased(address _buyer) external view returns (AssetPurchased[] memory) {
+        return purchasesByBuyer[_buyer];
+    }
+
+    function getTokensOwnedByUser(address user, uint256 _assetId) external view returns (uint256) {
+        return tokensOwnedByUser[user][_assetId];
     }
 }

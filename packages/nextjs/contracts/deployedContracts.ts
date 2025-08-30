@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     RwaForge: {
-      address: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+      address: "0xc6e7DF5E7b4f2A278906862b61205850344D4e7d",
       abi: [
         {
           inputs: [],
@@ -42,7 +42,7 @@ const deployedContracts = {
             {
               indexed: true,
               internalType: "uint256",
-              name: "assetId",
+              name: "_assetId",
               type: "uint256",
             },
           ],
@@ -55,7 +55,7 @@ const deployedContracts = {
             {
               indexed: true,
               internalType: "uint256",
-              name: "assetId",
+              name: "_assetId",
               type: "uint256",
             },
             {
@@ -66,6 +66,31 @@ const deployedContracts = {
             },
           ],
           name: "AssetPublished",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "_assetId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "buyer",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+          ],
+          name: "AssetsPurchasedEvent",
           type: "event",
         },
         {
@@ -85,31 +110,6 @@ const deployedContracts = {
             },
           ],
           name: "OwnershipTransferred",
-          type: "event",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "uint256",
-              name: "assetId",
-              type: "uint256",
-            },
-            {
-              indexed: true,
-              internalType: "address",
-              name: "buyer",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "amount",
-              type: "uint256",
-            },
-          ],
-          name: "TokensPurchased",
           type: "event",
         },
         {
@@ -204,7 +204,7 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "uint256",
-              name: "assetId",
+              name: "_assetId",
               type: "uint256",
             },
             {
@@ -222,7 +222,7 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "uint256",
-              name: "assetId",
+              name: "_assetId",
               type: "uint256",
             },
           ],
@@ -304,8 +304,145 @@ const deployedContracts = {
         {
           inputs: [
             {
+              internalType: "address",
+              name: "_buyer",
+              type: "address",
+            },
+          ],
+          name: "getAllAssetsPurchased",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "uint256",
+                  name: "purchaseID",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "assetID",
+                  type: "uint256",
+                },
+                {
+                  internalType: "address",
+                  name: "buyer",
+                  type: "address",
+                },
+                {
+                  internalType: "string",
+                  name: "title",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "description",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "category",
+                  type: "string",
+                },
+                {
+                  internalType: "string[]",
+                  name: "imageUris",
+                  type: "string[]",
+                },
+                {
+                  internalType: "uint256",
+                  name: "amount",
+                  type: "uint256",
+                },
+              ],
+              internalType: "struct RwaForge.AssetPurchased[]",
+              name: "",
+              type: "tuple[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_publisher",
+              type: "address",
+            },
+          ],
+          name: "getAllPublishedAssets",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "uint256",
+                  name: "id",
+                  type: "uint256",
+                },
+                {
+                  internalType: "address",
+                  name: "seller",
+                  type: "address",
+                },
+                {
+                  internalType: "string",
+                  name: "title",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "description",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "category",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "location",
+                  type: "string",
+                },
+                {
+                  internalType: "string[]",
+                  name: "imageURIs",
+                  type: "string[]",
+                },
+                {
+                  internalType: "uint256",
+                  name: "price",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "tokenSupply",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "tokensAvailable",
+                  type: "uint256",
+                },
+                {
+                  internalType: "bool",
+                  name: "isActive",
+                  type: "bool",
+                },
+              ],
+              internalType: "struct RwaForge.Asset[]",
+              name: "",
+              type: "tuple[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
               internalType: "uint256",
-              name: "assetId",
+              name: "_assetId",
               type: "uint256",
             },
           ],
@@ -381,7 +518,7 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "uint256",
-              name: "assetId",
+              name: "_assetId",
               type: "uint256",
             },
           ],
@@ -403,28 +540,9 @@ const deployedContracts = {
               name: "user",
               type: "address",
             },
-          ],
-          name: "getPublishedAssets",
-          outputs: [
-            {
-              internalType: "uint256[]",
-              name: "",
-              type: "uint256[]",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "user",
-              type: "address",
-            },
             {
               internalType: "uint256",
-              name: "assetId",
+              name: "_assetId",
               type: "uint256",
             },
           ],
@@ -510,6 +628,19 @@ const deployedContracts = {
         },
         {
           inputs: [],
+          name: "purchaseID",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
           name: "renounceOwnership",
           outputs: [],
           stateMutability: "nonpayable",
@@ -558,7 +689,7 @@ const deployedContracts = {
         renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
       },
-      deployedOnBlock: 12,
+      deployedOnBlock: 59,
     },
   },
 } as const;

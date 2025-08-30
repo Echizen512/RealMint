@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import { useBalance, useAccount } from "wagmi";
+import { useAccount, useBalance } from "wagmi";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { useScaffoldReadContract } from "~~/hooks/scaffold-eth/useScaffoldReadContract";
 import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth/useScaffoldWriteContract";
@@ -10,6 +10,7 @@ import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth/useScaffoldWrite
 const categories = ["All", "Real Estate", "Collectibles", "Commodities", "Vehicles", "Art"];
 
 export default function MarketplacePage() {
+  //states
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy, setSortBy] = useState("price-low");
@@ -174,7 +175,6 @@ export default function MarketplacePage() {
                         });
                       } catch (err) {
                         console.error("Purchase failed:", err);
-                        alert("Transaction failed. Please try again.");
                       }
                     }}
                   >
