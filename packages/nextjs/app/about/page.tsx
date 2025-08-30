@@ -2,17 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import {
-  ExternalLink,
-  Hammer,
-  HeartHandshake,
-  Home,
-  Info,
-  Lightbulb,
-  Target,
-  Upload,
-  User,
-} from "lucide-react";
+import { ExternalLink, Hammer, HeartHandshake, Home, Info, Lightbulb, Target, Upload, User } from "lucide-react";
 
 export default function AboutPage() {
   return (
@@ -81,8 +71,8 @@ export default function AboutPage() {
         </div>
         <div className="collapse-content">
           <p>
-            RWS-Forge is a dApp that enables users to tokenize, publish, and trade real-world assets on-chain. It bridges
-            physical ownership and digital liquidity using Ethereum L2 scalability and stablecoin integration.
+            RWS-Forge is a dApp that enables users to tokenize, publish, and trade real-world assets on-chain. It
+            bridges physical ownership and digital liquidity using Ethereum L2 scalability and stablecoin integration.
           </p>
         </div>
       </div>

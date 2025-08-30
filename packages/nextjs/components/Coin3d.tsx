@@ -38,7 +38,6 @@ export const Coin3d: React.FC<Coin3DProps> = ({ coinName, className, appearanceR
 
   //effects
   useEffect(() => {
-    console.log(innerWidth);
     const container = mountRef.current;
 
     const scene = new THREE.Scene();
@@ -106,8 +105,8 @@ export const Coin3d: React.FC<Coin3DProps> = ({ coinName, className, appearanceR
         );
       },
       undefined,
-      function (error) {
-        console.error(error);
+      function (err) {
+        console.error(err);
       },
     );
 
