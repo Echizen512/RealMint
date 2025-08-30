@@ -46,24 +46,19 @@ describe("RwaForge", () => {
     it("should allow a user to buy tokens", async () => {
       const [, buyer] = await ethers.getSigners();
 
-      // Datos del asset publicado
       const assetId = 0n;
       const amount = 1n;
 
-      // Obtener precio por token desde el contrato
       const pricePerToken = await rwaForge.getPricePerToken(assetId);
       const totalCost = pricePerToken * amount;
 
-      // Ejecutar compra
       await expect(rwaForge.connect(buyer).buyTokens(assetId, amount, { value: totalCost }))
         .to.emit(rwaForge, "TokensPurchased")
         .withArgs(assetId, buyer.address, amount);
 
-      // Verificar que se redujo tokensAvailable
       const asset = await rwaForge.getAsset(assetId);
       expect(asset.tokensAvailable).to.equal(asset.tokenSupply - amount);
 
-      // Verificar que el comprador tiene los tokens
       const tokensOwned = await rwaForge.tokensOwnedByUser(buyer.address, assetId);
       expect(tokensOwned).to.equal(amount);
     });
