@@ -2,8 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import { useBalance } from "wagmi";
-import { useAccount } from "wagmi";
+import { useBalance, useAccount } from "wagmi";
+import { useTransactor } from "~~/hooks/scaffold-eth";
 import { useScaffoldReadContract } from "~~/hooks/scaffold-eth/useScaffoldReadContract";
 import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth/useScaffoldWriteContract";
 
@@ -13,6 +13,7 @@ export default function MarketplacePage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy, setSortBy] = useState("price-low");
+  const tx = useTransactor();
 
   const { address: connectedAddress } = useAccount();
   const { address } = useAccount();
@@ -161,7 +162,7 @@ export default function MarketplacePage() {
                       const totalCost = pricePerToken * BigInt(1);
 
                       if (!nativeBalance || nativeBalance.value < totalCost) {
-                        alert("Insufficient funds to complete this purchase.");
+                        tx(() => Promise.reject(new Error("Insufficient funds to complete this purchase.")));
                         return;
                       }
 
