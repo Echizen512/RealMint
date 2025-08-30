@@ -10,7 +10,7 @@ import { DollarSign, LineChart, PackageSearch, ShieldCheck, Store, Wallet } from
 const features = [
   { icon: Store, title: "Marketplace", desc: "Buy and sell tokenized real-world assets" },
   { icon: PackageSearch, title: "Asset Discovery", desc: "Explore verified listings with live contract state" },
-  { icon: DollarSign, title: "USDC Payments", desc: "Secure transactions via Circle or Base" },
+  { icon: DollarSign, title: "USDC Payments", desc: "Secure transactions via Base" },
   { icon: ShieldCheck, title: "Escrow Logic", desc: "Optional escrow for safer trades" },
   { icon: LineChart, title: "Portfolio Analytics", desc: "Track earnings and asset performance" },
   { icon: Wallet, title: "Wallet Integration", desc: "Connect and manage your assets seamlessly" },
@@ -32,16 +32,23 @@ export const LandingPage = () => {
 
       {/* Hero Section */}
       <section className="h-screen w-screen flex justify-center items-center flex-col">
-        <div>
-          <h1 className="flex flex-col gap-6">
+        <div className="flex flex-col items-center">
+          <img
+            src="/logo.png"
+            alt="RWS-Forge Logo"
+            className="w-24 h-24 md:w-32 md:h-32 mb-6 relative z-30"
+          />
+
+
+          <h1 className="flex flex-col gap-6 items-center text-center">
             <span>
               <GradientText
                 colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
                 animationSpeed={3}
                 showBorder={false}
-                className="text-6xl md:text-8xl font-bold mb-6"
+                className="text-2xl md:text-6xl font-bold mb-6"
               >
-                The Future
+                RWS-Forge
               </GradientText>
             </span>
 
@@ -50,9 +57,9 @@ export const LandingPage = () => {
                 colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
                 animationSpeed={3}
                 showBorder={false}
-                className="text-6xl md:text-8xl font-bold"
+                className="text-2xl md:text-6xl font-bold"
               >
-                of Real Assets
+                The Future of Real Assets
               </GradientText>
             </span>
           </h1>
