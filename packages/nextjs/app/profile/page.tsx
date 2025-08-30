@@ -1,98 +1,20 @@
 "use client"
 
-import { useState } from "react"
-import { TrendingUp, DollarSign, ShoppingBag, Package, Calendar, BarChart3 } from "lucide-react"
-
-// Mock user data
-const userData = {
-  totalEarnings: 125750,
-  totalInvested: 89500,
-  assetsOwned: 12,
-  assetsSold: 8,
-}
-
-// Mock purchased assets
-const purchasedAssets = [
-  {
-    id: 1,
-    title: "Manhattan Luxury Apartment",
-    tokensOwned: 250,
-    totalTokens: 1000,
-    purchasePrice: 212500,
-    currentValue: 225000,
-    purchaseDate: "2024-01-15",
-    category: "Real Estate",
-    image: "/luxury-apartment-manhattan-skyline.png",
-  },
-  {
-    id: 2,
-    title: "Vintage Rolex Submariner",
-    tokensOwned: 45,
-    totalTokens: 100,
-    purchasePrice: 20250,
-    currentValue: 22500,
-    purchaseDate: "2024-02-03",
-    category: "Collectibles",
-    image: "/vintage-rolex-submariner-watch-luxury.png",
-  },
-  {
-    id: 4,
-    title: "Tesla Model S Plaid",
-    tokensOwned: 80,
-    totalTokens: 200,
-    purchasePrice: 50000,
-    currentValue: 52000,
-    purchaseDate: "2024-02-20",
-    category: "Vehicles",
-    image: "/tesla-model-s-plaid-electric-car.png",
-  },
-]
-
-// Mock sold assets
-const soldAssets = [
-  {
-    id: 3,
-    title: "Gold Bullion Bars",
-    tokensSold: 25,
-    totalTokens: 50,
-    salePrice: 35000,
-    originalPrice: 32500,
-    saleDate: "2024-03-01",
-    category: "Commodities",
-    profit: 2500,
-    image: "/gold-bullion-bars-precious-metals.png",
-  },
-  {
-    id: 5,
-    title: "Banksy Original Artwork",
-    tokensSold: 100,
-    totalTokens: 5000,
-    salePrice: 52000,
-    originalPrice: 50000,
-    saleDate: "2024-02-28",
-    category: "Art",
-    profit: 2000,
-    image: "/banksy-street-art-graffiti-original.png",
-  },
-]
-
-// Mock chart data
-const monthlyEarnings = [
-  { month: "Jan", earnings: 15000, investments: 25000 },
-  { month: "Feb", earnings: 28000, investments: 35000 },
-  { month: "Mar", earnings: 45000, investments: 29500 },
-  { month: "Apr", earnings: 37500, investments: 0 },
-]
-
-const categoryDistribution = [
-  { category: "Real Estate", percentage: 45, value: 225000 },
-  { category: "Collectibles", percentage: 25, value: 22500 },
-  { category: "Vehicles", percentage: 20, value: 52000 },
-  { category: "Art", percentage: 10, value: 26000 },
-]
+import { useState, useEffect } from "react"
+import {
+  TrendingUp,
+  ShoppingBag,
+  Package,
+  Calendar,
+  BarChart3,
+} from "lucide-react"
+import { useAccount } from "wagmi"
+import { useScaffoldReadContract } from "~~/hooks/scaffold-eth/useScaffoldReadContract"
 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState("overview")
+  const [ownedAssets, setOwnedAssets] = useState<any[]>([])
+  const { address } = useAccount()
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("en-US", {
@@ -103,43 +25,63 @@ export default function ProfilePage() {
     }).format(price)
   }
 
-  const formatAddress = (address: string) => {
-    return `${address.slice(0, 6)}...${address.slice(-4)}`
-  }
+  const { data: publishedIds } = useScaffoldReadContract({
+    contractName: "RealMintMarketplace",
+    functionName: "assetsPublishedBy",
+    args: [address, undefined],
+  })
 
-  const calculateROI = (current: number, original: number) => {
-    return (((current - original) / original) * 100).toFixed(1)
-  }
+  const { data: allAssets } = useScaffoldReadContract({
+    contractName: "RealMintMarketplace",
+    functionName: "getAllAssets",
+  })
+
+  useEffect(() => {
+    const fetchOwnedAssets = async () => {
+      if (!allAssets || !address) return
+
+      const owned: any[] = []
+
+      for (const asset of allAssets) {
+        const { data: tokens } = await useScaffoldReadContract({
+          contractName: "RealMintMarketplace",
+          functionName: "tokensOwnedByUser",
+          args: [address, asset.id],
+        })
+
+        if (tokens && Number(tokens) > 0) {
+          owned.push(asset)
+        }
+      }
+
+      setOwnedAssets(owned)
+    }
+
+    fetchOwnedAssets()
+  }, [allAssets, address])
+
+  const publishedCount = publishedIds?.length || 0
+  const soldCount = allAssets?.filter(
+    asset =>
+      asset.seller.toLowerCase() === address?.toLowerCase() &&
+      Number(asset.tokensAvailable) === 0
+  ).length || 0
 
   return (
     <div className="min-h-screen bg-primary">
-
       <div className="container mx-auto px-6 py-8">
 
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 mb-8">
           <div className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300">
             <div className="card-body">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm opacity-70">Total Earnings</p>
-                  <p className="text-2xl font-bold ">{formatPrice(userData.totalEarnings)}</p>
-                  <p className="text-xs opacity-60">+12.5% from last month</p>
+                  <p className="text-sm opacity-70">Assets Published</p>
+                  <p className="text-2xl font-bold">{publishedCount}</p>
+                  <p className="text-xs opacity-60">Listed by you</p>
                 </div>
-                <TrendingUp className="h-8 w-8 " />
-              </div>
-            </div>
-          </div>
-
-          <div className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300">
-            <div className="card-body">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm opacity-70">Total Invested</p>
-                  <p className="text-2xl font-bold">{formatPrice(userData.totalInvested)}</p>
-                  <p className="text-xs opacity-60">Across {userData.assetsOwned} assets</p>
-                </div>
-                <DollarSign className="h-8 w-8 " />
+                <BarChart3 className="h-8 w-8" />
               </div>
             </div>
           </div>
@@ -149,10 +91,10 @@ export default function ProfilePage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm opacity-70">Assets Owned</p>
-                  <p className="text-2xl font-bold">{userData.assetsOwned}</p>
+                  <p className="text-2xl font-bold">{ownedAssets.length}</p>
                   <p className="text-xs opacity-60">Active investments</p>
                 </div>
-                <ShoppingBag className="h-8 w-8 " />
+                <ShoppingBag className="h-8 w-8" />
               </div>
             </div>
           </div>
@@ -162,10 +104,10 @@ export default function ProfilePage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm opacity-70">Assets Sold</p>
-                  <p className="text-2xl font-bold">{userData.assetsSold}</p>
-                  <p className="text-xs opacity-60">Completed trades</p>
+                  <p className="text-2xl font-bold">{soldCount}</p>
+                  <p className="text-xs opacity-60">Fully purchased</p>
                 </div>
-                <Package className="h-8 w-8 " />
+                <Package className="h-8 w-8" />
               </div>
             </div>
           </div>
@@ -186,7 +128,10 @@ export default function ProfilePage() {
             >
               Purchased
             </button>
-            <button className={`tab ${activeTab === "sold" ? "tab-active" : ""}`} onClick={() => setActiveTab("sold")}>
+            <button
+              className={`tab ${activeTab === "sold" ? "tab-active" : ""}`}
+              onClick={() => setActiveTab("sold")}
+            >
               Sold
             </button>
             <button
@@ -234,7 +179,7 @@ export default function ProfilePage() {
                   </div>
                 </div>
 
-                {/* Portfolio Distribution */}
+                {/*
                 <div className="card bg-base-100 shadow-xl">
                   <div className="card-body">
                     <h2 className="card-title">
@@ -263,7 +208,6 @@ export default function ProfilePage() {
             </div>
           )}
 
-          {/* Purchased Tab */}
           {activeTab === "purchased" && (
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -315,7 +259,7 @@ export default function ProfilePage() {
             </div>
           )}
 
-          {/* Sold Tab */}
+          {/* 
           {activeTab === "sold" && (
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -367,11 +311,9 @@ export default function ProfilePage() {
             </div>
           )}
 
-          {/* Analytics Tab */}
           {activeTab === "analytics" && (
             <div className="space-y-6">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Monthly Performance Chart */}
                 <div className="card bg-base-100 shadow-xl">
                   <div className="card-body">
                     <h2 className="card-title">Monthly Performance</h2>
@@ -395,6 +337,7 @@ export default function ProfilePage() {
                     </div>
                   </div>
                 </div>
+                */}
 
                 {/* Performance Metrics */}
                 <div className="card bg-base-100 shadow-xl">
