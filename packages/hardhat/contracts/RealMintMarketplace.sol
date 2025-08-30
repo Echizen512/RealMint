@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract RealMintMarketplace is Ownable {
@@ -19,18 +18,16 @@ contract RealMintMarketplace is Ownable {
         bool isActive;
     }
 
-    IERC20 public usdc;
     uint256 public nextAssetId;
     mapping(uint256 => Asset) public assets;
+    mapping(address => uint256[]) public assetsPublishedBy;
+    mapping(address => mapping(uint256 => uint256)) public tokensOwnedByUser;
 
     event AssetPublished(uint256 indexed assetId, address indexed seller);
     event TokensPurchased(uint256 indexed assetId, address indexed buyer, uint256 amount);
     event AssetDeactivated(uint256 indexed assetId);
 
-    constructor(address _usdcAddress) Ownable(msg.sender) {
-        require(_usdcAddress != address(0), "Invalid USDC address");
-        usdc = IERC20(_usdcAddress);
-    }
+    constructor() Ownable(msg.sender) {}
 
     function publishAsset(
         string memory title,
@@ -43,11 +40,9 @@ contract RealMintMarketplace is Ownable {
     ) external {
         require(price > 0, "Price must be positive");
         require(tokenSupply > 0, "Token supply must be positive");
-
         require(_imageURIs.length >= 1, "At least one image is required");
         require(_imageURIs.length <= 5, "Maximum of 5 images allowed");
 
-        // Validar que ninguna URI esté vacía
         for (uint i = 0; i < _imageURIs.length; i++) {
             require(bytes(_imageURIs[i]).length > 0, "Image URI cannot be empty");
         }
@@ -66,6 +61,7 @@ contract RealMintMarketplace is Ownable {
             isActive: true
         });
 
+        assetsPublishedBy[msg.sender].push(nextAssetId);
         emit AssetPublished(nextAssetId, msg.sender);
         nextAssetId++;
     }
@@ -77,11 +73,6 @@ contract RealMintMarketplace is Ownable {
         require(amount > 0 && amount <= asset.tokensAvailable, "Invalid amount");
         require(asset.tokenSupply > 0, "Invalid token supply");
 
-        uint256 pricePerToken = asset.price / asset.tokenSupply;
-        uint256 totalCost = pricePerToken * amount;
-
-        require(usdc.transferFrom(msg.sender, asset.seller, totalCost), "USDC transfer failed");
-
         asset.tokensAvailable -= amount;
 
         if (asset.tokensAvailable == 0) {
@@ -90,6 +81,8 @@ contract RealMintMarketplace is Ownable {
         }
 
         emit TokensPurchased(assetId, msg.sender, amount);
+
+        tokensOwnedByUser[msg.sender][assetId] += amount;
     }
 
     function getAsset(uint256 assetId) external view returns (Asset memory) {
