@@ -124,4 +124,9 @@ contract RwaForge is Ownable {
         }
         return allAssets;
     }
+
+    function getPublishedAssets(address user) external view returns (uint256[] memory) {
+        return assetsPublishedBy[user];
+    }
+
 }

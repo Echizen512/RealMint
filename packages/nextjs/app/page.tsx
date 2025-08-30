@@ -159,7 +159,7 @@ export default function MarketplacePage() {
                       await writeRwaContractAsync({
                         functionName: "buyTokens",
                         args: [BigInt(asset.id), BigInt(1)],
-                        value: parseEther(totalCost.toString()),
+                        value: totalCost,
                       });
                     }}
                   >
