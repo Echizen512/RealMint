@@ -1,13 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  LockKeyhole,
-  EyeOff,
-  Wallet,
-  Database,
-  ShieldCheck,
-} from "lucide-react";
+import { Database, EyeOff, LockKeyhole, ShieldCheck, Wallet } from "lucide-react";
 
 export default function PrivacyPage() {
   return (
@@ -20,7 +14,8 @@ export default function PrivacyPage() {
             Privacy Policy
           </h1>
           <p className="py-4 text-base-content">
-            This privacy policy outlines how <span className="font-semibold">RWS-Forge</span> handles user data during the hackathon phase.
+            This privacy policy outlines how <span className="font-semibold">RWS-Forge</span> handles user data during
+            the hackathon phase.
           </p>
         </div>
       </div>
@@ -53,7 +48,10 @@ export default function PrivacyPage() {
               <Wallet className="w-5 h-5 " />
               Wallet-Only Identity
             </h2>
-            <p>Wallet addresses are used solely for contract execution and UI personalization. No additional identity data is stored.</p>
+            <p>
+              Wallet addresses are used solely for contract execution and UI personalization. No additional identity
+              data is stored.
+            </p>
           </div>
         </div>
 
@@ -63,11 +61,12 @@ export default function PrivacyPage() {
               <EyeOff className="w-5 h-5 text-warning" />
               No Tracking or Analytics
             </h2>
-            <p>This prototype does not embed cookies, trackers, or analytics tools. User privacy is preserved by design.</p>
+            <p>
+              This prototype does not embed cookies, trackers, or analytics tools. User privacy is preserved by design.
+            </p>
           </div>
         </div>
       </div>
-
     </div>
   );
 }

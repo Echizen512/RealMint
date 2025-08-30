@@ -41,4 +41,26 @@ describe("RwaForge", () => {
       await expect(publishTx).to.emit(rwaForge, "AssetPublished").withArgs(0n, owner.address);
     });
   });
+
+  describe("Purchase an asset 💸", () => {
+    it("should allow a user to buy tokens", async () => {
+      const [, buyer] = await ethers.getSigners();
+
+      const assetId = 0n;
+      const amount = 1n;
+
+      const pricePerToken = await rwaForge.getPricePerToken(assetId);
+      const totalCost = pricePerToken * amount;
+
+      await expect(rwaForge.connect(buyer).buyTokens(assetId, amount, { value: totalCost }))
+        .to.emit(rwaForge, "TokensPurchased")
+        .withArgs(assetId, buyer.address, amount);
+
+      const asset = await rwaForge.getAsset(assetId);
+      expect(asset.tokensAvailable).to.equal(asset.tokenSupply - amount);
+
+      const tokensOwned = await rwaForge.tokensOwnedByUser(buyer.address, assetId);
+      expect(tokensOwned).to.equal(amount);
+    });
+  });
 });
