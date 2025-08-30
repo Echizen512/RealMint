@@ -105,7 +105,7 @@ export default function PublishPage() {
     if (!files) return;
 
     const newImages = Array.from(files).filter(file => {
-      return file.type.startsWith("image/") && file.size <= 10 * 1024 * 1024; // 10MB limit
+      return file.type.startsWith("image/") && file.size <= 2 * 1024 * 1024; // 2MB limit
     });
 
     setFormData(prev => ({
@@ -148,7 +148,6 @@ export default function PublishPage() {
 
     setIsSubmitting(true);
 
-    console.log("dale");
     try {
       const uploadedImageUrls: string[] = [];
 
@@ -252,7 +251,7 @@ export default function PublishPage() {
                       value={formData.title}
                       onChange={e => handleInputChange("title", e.target.value)}
                       placeholder="e.g., Manhattan Luxury Apartment"
-                      className={`input input-bordered w-full ${errors.title ? "input-error" : ""}`}
+                      className={`input input-bordered w-full rounded-lg ${errors.title ? "input-error" : ""}`}
                     />
                     {errors.title && (
                       <label className="label">
@@ -272,7 +271,7 @@ export default function PublishPage() {
                       id="category"
                       value={formData.category}
                       onChange={e => handleInputChange("category", e.target.value)}
-                      className={`select select-bordered w-full ${errors.category ? "select-error" : ""}`}
+                      className={`select select-bordered w-full rounded-lg ${errors.category ? "select-error" : ""}`}
                     >
                       <option value="">Select a category</option>
                       {categories.map(cat => (
@@ -302,7 +301,7 @@ export default function PublishPage() {
                     onChange={e => handleInputChange("description", e.target.value)}
                     placeholder="Provide a detailed description of your asset..."
                     rows={4}
-                    className={`textarea textarea-bordered w-full ${errors.description ? "textarea-error" : ""}`}
+                    className={`textarea textarea-bordered w-full rounded-lg ${errors.description ? "textarea-error" : ""}`}
                   />
                   <label className="label">
                     <span className="label-text-alt">{formData.description.length}/500 characters</span>
@@ -325,7 +324,7 @@ export default function PublishPage() {
                     value={formData.location}
                     onChange={e => handleInputChange("location", e.target.value)}
                     placeholder="e.g., New York, NY"
-                    className={`input input-bordered w-full ${errors.location ? "input-error" : ""}`}
+                    className={`input input-bordered w-full rounded-lg ${errors.location ? "input-error" : ""}`}
                   />
                   {errors.location && (
                     <label className="label">
@@ -359,7 +358,7 @@ export default function PublishPage() {
                       value={formData.price}
                       onChange={e => handleInputChange("price", e.target.value)}
                       placeholder="0"
-                      className={`input input-bordered w-full ${errors.price ? "input-error" : ""}`}
+                      className={`input input-bordered w-full rounded-lg ${errors.price ? "input-error" : ""}`}
                     />
                     {formData.price && (
                       <label className="label">
@@ -386,7 +385,7 @@ export default function PublishPage() {
                       value={formData.totalTokens}
                       onChange={e => handleInputChange("totalTokens", e.target.value)}
                       placeholder="1000"
-                      className={`input input-bordered w-full ${errors.totalTokens ? "input-error" : ""}`}
+                      className={`input input-bordered w-full rounded-lg ${errors.totalTokens ? "input-error" : ""}`}
                     />
                     {formData.price && formData.totalTokens && (
                       <label className="label">
