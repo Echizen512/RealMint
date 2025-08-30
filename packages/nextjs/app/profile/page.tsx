@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BarChart3, Calendar, Package, ShoppingBag } from "lucide-react";
 import { useAccount } from "wagmi";
 import { useScaffoldReadContract } from "~~/hooks/scaffold-eth/useScaffoldReadContract";
 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState("overview");
-  const [ownedAssets] = useState<any[]>([]);
+  const [ownedAssets, setOwnedAssets] = useState<any[]>([]);
   const { address } = useAccount();
 
   const formatPrice = (price: number) => {
@@ -21,40 +21,41 @@ export default function ProfilePage() {
 
   const { data: publishedIds } = useScaffoldReadContract({
     contractName: "RwaForge",
-    functionName: "assetsPublishedBy",
-    args: [address, undefined],
+    functionName: "getPublishedAssets",
+    args: [address],
   });
+
 
   const { data: allAssets } = useScaffoldReadContract({
     contractName: "RwaForge",
     functionName: "getAllAssets",
   });
 
-  // useEffect(() => {
-  //   const fetchOwnedAssets = async () => {
-  //     if (!allAssets || !address) return;
+  useEffect(() => {
+    const fetchOwnedAssets = async () => {
+      if (!allAssets || !address) return;
 
-  //     const owned: any[] = [];
+      const owned: any[] = [];
 
-  //     for (const asset of allAssets) {
-  //       const { data: tokens } = await useScaffoldReadContract({
-  //         contractName: "RealMintMarketplace",
-  //         functionName: "tokensOwnedByUser",
-  //         args: [address, asset.id],
-  //       });
+      for (const asset of allAssets) {
+        const result = await useScaffoldReadContract({
+          contractName: "RwaForge",
+          functionName: "tokensOwnedByUser",
+          args: [address, BigInt(asset.id)],
+        });
 
-  //       if (tokens && Number(tokens) > 0) {
-  //         owned.push(asset);
-  //       }
-  //     }
+        if (result?.data && Number(result.data) > 0) {
+          owned.push({ ...asset, tokensOwned: Number(result.data) });
+        }
+      }
 
-  //     setOwnedAssets(owned);
-  //   };
+      setOwnedAssets(owned);
+    };
 
-  //   fetchOwnedAssets();
-  // }, [allAssets, address]);
+    fetchOwnedAssets();
+  }, [allAssets, address]);
 
-  const publishedCount = publishedIds || 0;
+  const publishedCount = Array.isArray(publishedIds) ? publishedIds.length : 0;
   const soldCount =
     allAssets?.filter(
       asset => asset.seller.toLowerCase() === address?.toLowerCase() && Number(asset.tokensAvailable) === 0,
@@ -128,41 +129,90 @@ export default function ProfilePage() {
           {/* Overview Tab */}
           {activeTab === "overview" && (
             <div className="space-y-6">
-              <div>
-                {/* Recent Activity */}
-                <div className="card bg-base-100 shadow-xl">
-                  <div className="card-body">
-                    <h2 className="card-title">
-                      <Calendar className="w-5 h-5 " />
-                      Recent Activity
-                    </h2>
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between p-3 bg-base-200 rounded-lg">
-                        <div>
-                          <p className="font-medium">Sold Gold Bullion Bars</p>
-                          <p className="text-sm opacity-70">March 1, 2024</p>
-                        </div>
-                        <div className="badge badge-primary">+{formatPrice(2500)}</div>
-                      </div>
-                      <div className="flex items-center justify-between p-3 bg-base-200 rounded-lg">
-                        <div>
-                          <p className="font-medium">Purchased Tesla Model S</p>
-                          <p className="text-sm opacity-70">February 20, 2024</p>
-                        </div>
-                        <div className="badge badge-outline">-{formatPrice(50000)}</div>
-                      </div>
-                      <div className="flex items-center justify-between p-3 bg-base-200 rounded-lg">
-                        <div>
-                          <p className="font-medium">Sold Banksy Artwork</p>
-                          <p className="text-sm opacity-70">February 28, 2024</p>
-                        </div>
-                        <div className="badge badge-primary">+{formatPrice(2000)}</div>
-                      </div>
-                    </div>
+              <div className="card bg-base-100 shadow-xl">
+                <div className="card-body">
+                  <h2 className="card-title">
+                    <Calendar className="w-5 h-5" />
+                    Recent Activity
+                  </h2>
+
+                  <div className="space-y-4">
+                    {[...allAssets || []]
+                      .filter(asset => {
+                        const isSeller = asset.seller.toLowerCase() === address?.toLowerCase();
+                        const isSold = isSeller && Number(asset.tokensAvailable) === 0;
+                        const isPublished = isSeller;
+                        const isPurchased = ownedAssets.some(o => o.id === asset.id);
+                        return isSold || isPublished || isPurchased;
+                      })
+                      .slice(-3) 
+                      .reverse() 
+                      .map(asset => {
+                        const isSeller = asset.seller.toLowerCase() === address?.toLowerCase();
+                        const isSold = isSeller && Number(asset.tokensAvailable) === 0;
+                        const isPublished = isSeller;
+                        const isPurchased = ownedAssets.some(o => o.id === asset.id);
+
+                        let label = "";
+                        let badge = "";
+                        let amount = "";
+
+                        if (isSold) {
+                          label = `Sold ${asset.title}`;
+                          badge = "badge-primary";
+                          amount = "+" + formatPrice(Number(asset.price));
+                        } else if (isPurchased) {
+                          label = `Purchased ${asset.title}`;
+                          badge = "badge-outline";
+                          amount = "-" + formatPrice(Number(asset.price));
+                        } else if (isPublished) {
+                          label = `Published ${asset.title}`;
+                          badge = "badge-neutral";
+                          amount = "";
+                        }
+
+                        return (
+                          <div key={asset.id} className="flex items-center justify-between p-3 bg-base-200 rounded-lg">
+                            <div>
+                              <p className="font-medium">{label}</p>
+                              <p className="text-sm opacity-70">{asset.category} • {asset.location}</p>
+                            </div>
+                            {amount && <div className={`badge ${badge}`}>{amount}</div>}
+                          </div>
+                        );
+                      })}
                   </div>
                 </div>
+              </div>
+            </div>
+          )}
 
-                {/*
+
+          {/* Purchased Tab */}
+          {activeTab === "purchased" && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {ownedAssets.map(asset => (
+                <div key={asset.id} className="card bg-base-100 shadow-md">
+                  <div className="card-body">
+                    <h2 className="card-title">{asset.title}</h2>
+                    <p className="text-sm opacity-70">{asset.description}</p>
+                    <div className="badge badge-outline">{asset.category}</div>
+                    <p className="text-xs opacity-60 mt-2">You own {asset.tokensOwned} tokens</p>
+                  </div>
+                </div>
+              ))}
+              {ownedAssets.length === 0 && (
+                <div className="text-center col-span-full py-12 text-sm opacity-50">No assets purchased yet</div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+{/*
                 <div className="card bg-base-100 shadow-xl">
                   <div className="card-body">
                     <h2 className="card-title">
@@ -293,7 +343,7 @@ export default function ProfilePage() {
               </div>
             </div>
           )}
-                */}
+
               </div>
             </div>
           )}
@@ -302,3 +352,5 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+*/}
