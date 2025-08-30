@@ -1,14 +1,16 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { RwaForge } from "../typechain-types";
-import { parseEther } from "ethers";
+import { ContractTransactionResponse, parseEther } from "ethers";
+import { HardhatEthersSigner } from "@nomicfoundation/hardhat-ethers/signers";
 
 describe("RwaForge", () => {
-  //smart contract
   let rwaForge: RwaForge;
+  let publishTx: ContractTransactionResponse;
+  let owner: HardhatEthersSigner;
+
   before(async () => {
-    // const [owner] = await ethers.getSigners();
-    // owner.address
+    [owner] = await ethers.getSigners();
     const yourRwaForgeFactory = await ethers.getContractFactory("RwaForge");
     rwaForge = (await yourRwaForgeFactory.deploy()) as RwaForge;
     await rwaForge.waitForDeployment();
@@ -21,8 +23,8 @@ describe("RwaForge", () => {
   });
 
   describe("Publish an asset 📣", () => {
-    it("create a asset", async () => {
-      await rwaForge.publishAsset(
+    it("should create an asset", async () => {
+      publishTx = await rwaForge.publishAsset(
         "Table",
         "A table made of thick brown wood",
         "category",
@@ -33,6 +35,10 @@ describe("RwaForge", () => {
       );
 
       expect(await rwaForge.nextAssetId()).to.equal(1n);
+    });
+
+    it("should emit AssetPublished event with correct args", async () => {
+      await expect(publishTx).to.emit(rwaForge, "AssetPublished").withArgs(0n, owner.address);
     });
   });
 });
