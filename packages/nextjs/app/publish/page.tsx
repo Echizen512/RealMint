@@ -49,8 +49,8 @@ export default function PublishPage() {
   const [dragActive, setDragActive] = useState(false);
 
   //Smart contract
-  const { writeContractAsync: writeMarketPlaceAsync } = useScaffoldWriteContract({
-    contractName: "RealMintMarketplace",
+  const { writeContractAsync: writeRwaForgeAsync } = useScaffoldWriteContract({
+    contractName: "RwaForge",
   });
 
   //functions
@@ -178,7 +178,7 @@ export default function PublishPage() {
         uploadedImageUrls.push(result.url);
       }
 
-      writeMarketPlaceAsync({
+      await writeRwaForgeAsync({
         functionName: "publishAsset",
         args: [
           formData.title,

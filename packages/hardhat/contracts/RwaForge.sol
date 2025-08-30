@@ -3,7 +3,8 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract RealMintMarketplace is Ownable {
+contract RwaForge is Ownable {
+    //Structs
     struct Asset {
         uint256 id;
         address seller;
@@ -18,11 +19,13 @@ contract RealMintMarketplace is Ownable {
         bool isActive;
     }
 
+    //States
     uint256 public nextAssetId;
     mapping(uint256 => Asset) public assets;
     mapping(address => uint256[]) public assetsPublishedBy;
     mapping(address => mapping(uint256 => uint256)) public tokensOwnedByUser;
 
+    //Events
     event AssetPublished(uint256 indexed assetId, address indexed seller);
     event TokensPurchased(uint256 indexed assetId, address indexed buyer, uint256 amount);
     event AssetDeactivated(uint256 indexed assetId);

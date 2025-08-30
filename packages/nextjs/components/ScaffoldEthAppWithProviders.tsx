@@ -19,24 +19,23 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   useInitializeNativeCurrencyPrice();
   const { isConnected } = useAccount();
 
-
-return (
-  <>
-    {!isConnected ? (
-      <>
-        <LandingPage />
-        <Footer />
-      </>
-    ) : (
-      <>
-        <Header />
-        <main className="flex-1 flex flex-col min-h-screen">{children}</main>
-        <Footer />
-        <Toaster />
-      </>
-    )}
-  </>
-);
+  return (
+    <>
+      {!isConnected ? (
+        <>
+          <LandingPage />
+          <Footer />
+        </>
+      ) : (
+        <>
+          <Header />
+          <main className="flex-1 flex flex-col min-h-screen">{children}</main>
+          <Footer />
+          <Toaster />
+        </>
+      )}
+    </>
+  );
 };
 
 export const queryClient = new QueryClient({

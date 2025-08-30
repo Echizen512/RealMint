@@ -17,11 +17,11 @@ export default function MarketplacePage() {
   const { address: connectedAddress } = useAccount();
 
   const { data: assets } = useScaffoldReadContract({
-    contractName: "RealMintMarketplace",
+    contractName: "RwaForge",
     functionName: "getAllAssets",
   });
 
-  const { writeContractAsync: writeRealMintMarketContractAsync } = useScaffoldWriteContract("RealMintMarketplace");
+  const { writeContractAsync: writeRwaContractAsync } = useScaffoldWriteContract("RwaForge");
 
   const filteredAssets = useMemo(() => {
     if (!assets) return [];
@@ -156,7 +156,7 @@ export default function MarketplacePage() {
                       const totalCost = pricePerToken * BigInt(1);
 
                       console.log(totalCost);
-                      await writeRealMintMarketContractAsync({
+                      await writeRwaContractAsync({
                         functionName: "buyTokens",
                         args: [BigInt(asset.id), BigInt(1)],
                         value: parseEther(totalCost.toString()),

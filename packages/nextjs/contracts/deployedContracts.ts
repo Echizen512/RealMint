@@ -6,8 +6,8 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 const deployedContracts = {
   31337: {
-    RealMintMarketplace: {
-      address: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+    RwaForge: {
+      address: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
       abi: [
         {
           inputs: [],
@@ -293,7 +293,7 @@ const deployedContracts = {
                   type: "bool",
                 },
               ],
-              internalType: "struct RealMintMarketplace.Asset[]",
+              internalType: "struct RwaForge.Asset[]",
               name: "",
               type: "tuple[]",
             },
@@ -369,7 +369,7 @@ const deployedContracts = {
                   type: "bool",
                 },
               ],
-              internalType: "struct RealMintMarketplace.Asset",
+              internalType: "struct RwaForge.Asset",
               name: "",
               type: "tuple",
             },
@@ -515,7 +515,7 @@ const deployedContracts = {
         renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
       },
-      deployedOnBlock: 12,
+      deployedOnBlock: 5,
     },
   },
 } as const;

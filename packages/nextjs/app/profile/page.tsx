@@ -20,13 +20,13 @@ export default function ProfilePage() {
   };
 
   const { data: publishedIds } = useScaffoldReadContract({
-    contractName: "RealMintMarketplace",
+    contractName: "RwaForge",
     functionName: "assetsPublishedBy",
     args: [address, undefined],
   });
 
   const { data: allAssets } = useScaffoldReadContract({
-    contractName: "RealMintMarketplace",
+    contractName: "RwaForge",
     functionName: "getAllAssets",
   });
 

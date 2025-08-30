@@ -8,7 +8,7 @@ import { Contract } from "ethers";
  *
  * @param hre HardhatRuntimeEnvironment object.
  */
-const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
+const deployRwaForge: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   /*
     On localhost, the deployer account is the one that comes with Hardhat, which is already funded.
 
@@ -22,9 +22,10 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  await deploy("RealMintMarketplace", {
+  await deploy("RwaForge", {
     from: deployer,
     // Contract constructor arguments
+    // args:[]
     log: true,
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
     // automatically mining the contract deployment transaction. There is no effect on live networks.
@@ -32,12 +33,12 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   });
 
   // Get the deployed contract to interact with it after deploying.
-  const realMintMarketplace = await hre.ethers.getContract<Contract>("RealMintMarketplace", deployer);
-  console.log("✅ RealMintMarketplace deployed at:", realMintMarketplace.address);
+  const RwaForge = await hre.ethers.getContract<Contract>("RwaForge", deployer);
+  console.log("✅ RwaForge deployed at:", RwaForge.address);
 };
 
-export default deployYourContract;
+export default deployRwaForge;
 
 // Tags are useful if you have multiple deploy files and only want to run one of them.
-// e.g. yarn deploy --tags YourContract
-deployYourContract.tags = ["RealMintMarketplace"];
+// e.g. yarn deploy --tags RwsForge
+deployRwaForge.tags = ["RwaForge"];
