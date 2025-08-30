@@ -145,12 +145,11 @@ export default function PublishPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
     setIsSubmitting(true);
 
+    console.log("dale");
     try {
       const uploadedImageUrls: string[] = [];
 
@@ -159,7 +158,7 @@ export default function PublishPage() {
         const imageFormData = new FormData();
         imageFormData.append("file", imageFile);
 
-        const response = await fetch("/api/upload-asset-image", {
+        const response = await fetch("api/upload-image", {
           method: "POST",
           body: imageFormData,
         });
