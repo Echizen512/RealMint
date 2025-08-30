@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     RealMintMarketplace: {
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
       abi: [
         {
           inputs: [
@@ -159,11 +159,6 @@ const deployedContracts = {
               type: "string",
             },
             {
-              internalType: "string",
-              name: "imageURI",
-              type: "string",
-            },
-            {
               internalType: "uint256",
               name: "price",
               type: "uint256",
@@ -255,9 +250,9 @@ const deployedContracts = {
                   type: "string",
                 },
                 {
-                  internalType: "string",
-                  name: "imageURI",
-                  type: "string",
+                  internalType: "string[]",
+                  name: "imageURIs",
+                  type: "string[]",
                 },
                 {
                   internalType: "uint256",
@@ -331,9 +326,9 @@ const deployedContracts = {
                   type: "string",
                 },
                 {
-                  internalType: "string",
-                  name: "imageURI",
-                  type: "string",
+                  internalType: "string[]",
+                  name: "imageURIs",
+                  type: "string[]",
                 },
                 {
                   internalType: "uint256",
@@ -432,9 +427,9 @@ const deployedContracts = {
               type: "string",
             },
             {
-              internalType: "string",
-              name: "imageURI",
-              type: "string",
+              internalType: "string[]",
+              name: "_imageURIs",
+              type: "string[]",
             },
             {
               internalType: "uint256",
@@ -491,7 +486,7 @@ const deployedContracts = {
         renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
       },
-      deployedOnBlock: 1,
+      deployedOnBlock: 2,
     },
   },
 } as const;

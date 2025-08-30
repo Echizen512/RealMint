@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import { useScaffoldReadContract } from "~~/hooks/scaffold-eth/useScaffoldReadContract"
+import { useScaffoldReadContract } from "~~/hooks/scaffold-eth/useScaffoldReadContract";
 
 const categories = ["All", "Real Estate", "Collectibles", "Commodities", "Vehicles", "Art"];
 
@@ -65,7 +65,7 @@ export default function MarketplacePage() {
               type="text"
               placeholder="Search assets..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={e => setSearchTerm(e.target.value)}
               className="input input-bordered w-full pl-10"
             />
           </div>
@@ -82,7 +82,7 @@ export default function MarketplacePage() {
             ))}
           </div>
 
-          <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="select select-bordered">
+          <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="select select-bordered">
             <option value="price-low">Price: Low to High</option>
             <option value="price-high">Price: High to Low</option>
             <option value="name">Name: A to Z</option>
@@ -97,23 +97,23 @@ export default function MarketplacePage() {
               className="rounded-box border border-base-300 bg-base-200 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.02] overflow-hidden"
             >
               <div className="relative">
-                <img src={asset.imageURI || "/placeholder.svg"} alt={asset.title} className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105" />
+                <img
+                  src={asset.imageURIs[0] || "/placeholder.svg"}
+                  alt={asset.title}
+                  className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
+                />
                 <div className="absolute top-3 left-3">
                   <div className={`badge ${asset.isActive ? "badge-primary" : "badge-neutral"}`}>
                     {asset.isActive ? "Available" : "Sold Out"}
                   </div>
                 </div>
                 <div className="absolute top-3 right-3">
-                  <div className="badge badge-outline backdrop-blur-sm bg-base-100/80">
-                    {asset.category}
-                  </div>
+                  <div className="badge badge-outline backdrop-blur-sm bg-base-100/80">{asset.category}</div>
                 </div>
               </div>
 
               <div className="p-4">
-                <h3 className="text-lg font-semibold mb-2 hover:text-primary transition-colors">
-                  {asset.title}
-                </h3>
+                <h3 className="text-lg font-semibold mb-2 hover:text-primary transition-colors">{asset.title}</h3>
                 <p className="text-sm opacity-70 mb-3 line-clamp-2">{asset.description}</p>
                 <div className="flex justify-between text-sm opacity-70 mb-3">
                   <span>{asset.location}</span>

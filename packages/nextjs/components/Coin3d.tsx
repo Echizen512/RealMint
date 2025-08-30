@@ -8,7 +8,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { cn } from "~~/utils/cn";
 
 type Coin3DProps = {
-  coinName: "polygon" | "usdc";
+  coinName: "base" | "usdc";
   className?: string;
   appearanceRight?: boolean;
 };

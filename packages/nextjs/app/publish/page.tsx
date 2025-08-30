@@ -4,6 +4,7 @@ import type React from "react";
 import { useState } from "react";
 import Link from "next/link";
 import { AlertCircle, CheckCircle, DollarSign, ImageIcon, Upload, X } from "lucide-react";
+import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth/useScaffoldWriteContract";
 
 const categories = ["Real Estate", "Collectibles", "Commodities", "Vehicles", "Art", "Other"];
 
@@ -30,6 +31,7 @@ interface FormErrors {
 }
 
 export default function PublishPage() {
+  //states
   const [formData, setFormData] = useState<FormData>({
     title: "",
     description: "",
@@ -46,6 +48,12 @@ export default function PublishPage() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [dragActive, setDragActive] = useState(false);
 
+  //Smart contract
+  const { writeContractAsync: writeMarketPlaceAsync } = useScaffoldWriteContract({
+    contractName: "RealMintMarketplace",
+  });
+
+  //functions
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
@@ -169,26 +177,39 @@ export default function PublishPage() {
         console.log(result);
         uploadedImageUrls.push(result.url);
       }
+
+      writeMarketPlaceAsync({
+        functionName: "publishAsset",
+        args: [
+          formData.title,
+          formData.description,
+          formData.category,
+          formData.location,
+          uploadedImageUrls,
+          BigInt(formData.price),
+          BigInt(formData.totalTokens),
+        ],
+      });
+
+      setIsSubmitting(false);
+      setIsSuccess(true);
+
+      setTimeout(() => {
+        setIsSuccess(false);
+        setFormData({
+          title: "",
+          description: "",
+          category: "",
+          location: "",
+          price: "",
+          totalTokens: "",
+          images: [],
+          terms: false,
+        });
+      }, 3000);
     } catch (err) {
       console.log(err);
     }
-
-    setIsSubmitting(false);
-    setIsSuccess(true);
-
-    setTimeout(() => {
-      setIsSuccess(false);
-      setFormData({
-        title: "",
-        description: "",
-        category: "",
-        location: "",
-        price: "",
-        totalTokens: "",
-        images: [],
-        terms: false,
-      });
-    }, 3000);
   };
 
   const formatPrice = (price: string) => {

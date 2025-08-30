@@ -25,7 +25,7 @@ export const LandingPage = () => {
       <div className="absolute inset-0 bg-base-100/40 z-10" />
 
       {/* Coins3D */}
-      <Coin3d coinName="polygon" className="z-20" appearanceRight={true} />
+      <Coin3d coinName="base" className="z-20" appearanceRight={true} />
       <div className="w-full flex justify-end">
         <Coin3d coinName="usdc" className="z-20" />
       </div>
