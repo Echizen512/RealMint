@@ -12,7 +12,7 @@ contract RealMintMarketplace is Ownable {
         string description;
         string category;
         string location;
-        string imageURI;
+        string[] imageURIs;
         uint256 price;
         uint256 tokenSupply;
         uint256 tokensAvailable;
@@ -37,12 +37,20 @@ contract RealMintMarketplace is Ownable {
         string memory description,
         string memory category,
         string memory location,
-        string memory imageURI,
+        string[] memory _imageURIs,
         uint256 price,
         uint256 tokenSupply
     ) external {
         require(price > 0, "Price must be positive");
         require(tokenSupply > 0, "Token supply must be positive");
+
+        require(_imageURIs.length >= 1, "At least one image is required");
+        require(_imageURIs.length <= 5, "Maximum of 5 images allowed");
+
+        // Validar que ninguna URI esté vacía
+        for (uint i = 0; i < _imageURIs.length; i++) {
+            require(bytes(_imageURIs[i]).length > 0, "Image URI cannot be empty");
+        }
 
         assets[nextAssetId] = Asset({
             id: nextAssetId,
@@ -51,7 +59,7 @@ contract RealMintMarketplace is Ownable {
             description: description,
             category: category,
             location: location,
-            imageURI: imageURI,
+            imageURIs: _imageURIs,
             price: price,
             tokenSupply: tokenSupply,
             tokensAvailable: tokenSupply,
