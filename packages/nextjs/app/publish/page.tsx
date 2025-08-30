@@ -257,7 +257,7 @@ export default function PublishPage() {
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
               <h2 className="card-title">
-                <DollarSign className="w-5 h-5 text-primary" />
+                <DollarSign className="w-5 h-5 " />
                 Asset Details
               </h2>
               <div className="space-y-6">
@@ -364,7 +364,7 @@ export default function PublishPage() {
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
               <h2 className="card-title">
-                <DollarSign className="w-5 h-5 text-primary" />
+                <DollarSign className="w-5 h-5 " />
                 Pricing & Tokenization
               </h2>
               <div className="space-y-6">
@@ -383,7 +383,7 @@ export default function PublishPage() {
                     />
                     {formData.price && (
                       <label className="label">
-                        <span className="label-text-alt text-primary font-medium">{formatPrice(formData.price)}</span>
+                        <span className="label-text-alt  font-medium">{formatPrice(formData.price)}</span>
                       </label>
                     )}
                     {errors.price && (
@@ -436,7 +436,7 @@ export default function PublishPage() {
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
               <h2 className="card-title">
-                <ImageIcon className="w-5 h-5 text-primary" />
+                <ImageIcon className="w-5 h-5 " />
                 Asset Images *
               </h2>
               <div className="space-y-6">
