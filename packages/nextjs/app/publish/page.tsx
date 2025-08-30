@@ -144,7 +144,6 @@ export default function PublishPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!validateForm()) return;
 
     setIsSubmitting(true);
@@ -154,7 +153,7 @@ export default function PublishPage() {
       const uploadedImageUrls: string[] = [];
 
       // Subir cada imagen al backend
-      for (const imageFile of formData.images) {
+      for await (const imageFile of formData.images) {
         const imageFormData = new FormData();
         imageFormData.append("file", imageFile);
 
@@ -437,7 +436,7 @@ export default function PublishPage() {
                   <Upload className="w-12 h-12 text-base-content/50 mx-auto mb-4" />
                   <p className="text-lg font-medium mb-2">Drop images here or click to upload</p>
                   <p className="text-sm text-base-content/70 mb-4">
-                    Support: JPG, PNG, GIF up to 10MB each (Max 5 images)
+                    Support: JPG, PNG, GIF up to 2MB each (Max 5 images)
                   </p>
                   <input
                     type="file"
