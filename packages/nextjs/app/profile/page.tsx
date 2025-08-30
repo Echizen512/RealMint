@@ -134,18 +134,12 @@ export default function ProfilePage() {
             >
               Sold
             </button>
-            <button
-              className={`tab ${activeTab === "analytics" ? "tab-active" : ""}`}
-              onClick={() => setActiveTab("analytics")}
-            >
-              Analytics
-            </button>
           </div>
 
           {/* Overview Tab */}
           {activeTab === "overview" && (
             <div className="space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div>
                 {/* Recent Activity */}
                 <div className="card bg-base-100 shadow-xl">
                   <div className="card-body">
@@ -310,75 +304,9 @@ export default function ProfilePage() {
               </div>
             </div>
           )}
-
-          {activeTab === "analytics" && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="card bg-base-100 shadow-xl">
-                  <div className="card-body">
-                    <h2 className="card-title">Monthly Performance</h2>
-                    <div className="space-y-4">
-                      {monthlyEarnings.map((month, index) => (
-                        <div key={month.month} className="space-y-2">
-                          <div className="flex justify-between text-sm">
-                            <span>{month.month}</span>
-                            <div className="flex gap-4">
-                              <span>Earnings: {formatPrice(month.earnings)}</span>
-                              <span className="opacity-70">Invested: {formatPrice(month.investments)}</span>
-                            </div>
-                          </div>
-                          <progress
-                            className="progress progress-success w-full h-3"
-                            value={month.earnings}
-                            max="50000"
-                          ></progress>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
                 */}
-
-                {/* Performance Metrics */}
-                <div className="card bg-base-100 shadow-xl">
-                  <div className="card-body">
-                    <h2 className="card-title">Performance Metrics</h2>
-                    <div className="space-y-6">
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <span className="opacity-70">Total ROI</span>
-                          <span className="font-bold ">+40.5%</span>
-                        </div>
-                        <progress className="progress progress-success w-full" value="40.5" max="100"></progress>
-                      </div>
-
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <span className="opacity-70">Best Performing Asset</span>
-                          <span className="font-medium">Tesla Model S</span>
-                        </div>
-                        <div className="text-sm ">+4.0% ROI</div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <span className="opacity-70">Average Hold Time</span>
-                          <span className="font-medium">45 days</span>
-                        </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <span className="opacity-70">Success Rate</span>
-                          <span className="font-medium ">87.5%</span>
-                        </div>
-                        <progress className="progress progress-success w-full" value="87.5" max="100"></progress>
-                      </div>
-                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
           )}
         </div>
       </div>
