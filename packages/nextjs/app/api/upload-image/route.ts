@@ -39,7 +39,8 @@ export const POST = async (request: NextRequest) => {
       message: "success",
       cid: upload.cid,
       name: upload.name,
-      url: `https://${pinata?.config?.pinataGateway}/ipfs/${upload.cid}`,
+      // url: `https://${pinata?.config?.pinataGateway}/ipfs/${upload.cid}`,
+      url: `https://ipfs.io/ipfs/${upload.cid}`,
     });
   } catch (err) {
     console.error("Upload error:", err);
