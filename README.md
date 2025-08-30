@@ -1,12 +1,12 @@
 # 🟢 RWS-Forge
 
-**RWS-Forge** is a modular Web3 marketplace for buying and selling tokenized real-world assets (RWAs). Built with Scaffold ETH 2, Circle, and Base, it delivers a premium user experience with robust smart contract logic and a visually immersive frontend powered by V0.
+**RWS-Forge** is a modular Web3 marketplace for buying and selling tokenized real-world assets (RWAs). Built with Scaffold ETH 2 and Base, it delivers a premium user experience with robust smart contract logic and a visually immersive frontend powered by V0.
 
 ---
 
 ## 🧠 Definition
 
-RWS-Forge is a decentralized application (dApp) that enables users to tokenize, publish, and trade real-world assets on-chain. It bridges the gap between physical ownership and digital liquidity by leveraging Ethereum Layer 2 scalability and stablecoin integration.
+RWS-Forge is a decentralized application (dApp) that enables users to tokenize, publish, and trade real-world assets on-chain. It bridges the gap between physical ownership and digital liquidity by leveraging Ethereum Layer 2 scalability.
 
 ---
 
@@ -18,7 +18,6 @@ The current landscape of asset exchange is fragmented, opaque, and slow. RWS-For
 - Enabling peer-to-peer trading with trustless settlement  
 - Offering a composable architecture for future modules (governance, auctions, etc.)  
 - Delivering a visually elegant and reactive UI powered by DaisyUI and V0  
-- Integrating Circle (USDC) for stable, real-world value exchange  
 - Running on Base for fast, low-cost transactions  
 
 ---
@@ -28,7 +27,6 @@ The current landscape of asset exchange is fragmented, opaque, and slow. RWS-For
 - ✅ Build a fully on-chain marketplace for publishing and trading RWAs  
 - ✅ Ensure frontend reflects live contract state—no hardcoded data  
 - ✅ Deliver a premium UI with animated components and responsive layouts  
-- ✅ Integrate stablecoin payments via Circle (USDC)  
 - ✅ Architect the system for modular upgrades (e.g. governance, auctions)  
 - ✅ Optimize developer experience with Scaffold ETH 2 and Typechain  
 - ✅ Showcase composability and speed during hackathon constraints  
@@ -42,7 +40,6 @@ The current landscape of asset exchange is fragmented, opaque, and slow. RWS-For
 | Smart Contracts  | Solidity + Hardhat + Typechain       | Modular, extensible contract logic       |
 | Frontend         | React + TypeScript + DaisyUI + V0    | Premium UI with animated components      |
 | Blockchain       | Base (L2) + Ethereum                 | Scalable, secure execution environment   |
-| Payments         | Circle (USDC)                        | Stablecoin integration for real value    |
 | Dev Tools        | Scaffold ETH 2 + RainbowKit          | Rapid prototyping and wallet UX          |
 | UI Components    | Lucide React                         | Clean, consistent iconography            |
 | Auth & State     | On-chain membership + wallet connect | No localStorage, full contract sync      |
@@ -68,18 +65,27 @@ Displays recent activity, owned assets, earnings, and transaction history. Fully
 
 ---
 
+## 🧪 Testing
+
+RWS-Forge includes smart contract testing using **Hardhat** and **Chai**, ensuring reliability and correctness across core functionalities.
+
+- The test suite is located at [`RwaForge.ts`](https://github.com/Echizen512/rws-forge/blob/master/packages/hardhat/test/RwaForge.ts)
+- To run the tests, simply execute:
+
+![Testing](https://i.ibb.co/VpTJDzrJ/Testing.png)
+
+---
+
 ## 🔗 URLs
 
 | Resource         | Link (to be added)                  |
 |------------------|-------------------------------------|
 | Live dApp        | ``              |
-| GitHub Repo      | `` |
-| Devpost          | `` |
-| Demo Video       | `` |
+| GitHub Repo      | `https://github.com/Echizen512/rws-forge` |
+| Demo Video       | `https://rws-forge.vercel.app/` |
 | Contract Address | `0x...`                             |
 | Explorer         | `` |
 
-> Replace these with your actual links when ready.
 
 ---
 
