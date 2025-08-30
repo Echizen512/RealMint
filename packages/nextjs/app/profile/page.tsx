@@ -1,20 +1,14 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import {
-  TrendingUp,
-  ShoppingBag,
-  Package,
-  Calendar,
-  BarChart3,
-} from "lucide-react"
-import { useAccount } from "wagmi"
-import { useScaffoldReadContract } from "~~/hooks/scaffold-eth/useScaffoldReadContract"
+import { useState } from "react";
+import { BarChart3, Calendar, Package, ShoppingBag } from "lucide-react";
+import { useAccount } from "wagmi";
+import { useScaffoldReadContract } from "~~/hooks/scaffold-eth/useScaffoldReadContract";
 
 export default function ProfilePage() {
-  const [activeTab, setActiveTab] = useState("overview")
-  const [ownedAssets, setOwnedAssets] = useState<any[]>([])
-  const { address } = useAccount()
+  const [activeTab, setActiveTab] = useState("overview");
+  const [ownedAssets] = useState<any[]>([]);
+  const { address } = useAccount();
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("en-US", {
@@ -22,55 +16,53 @@ export default function ProfilePage() {
       currency: "USD",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-    }).format(price)
-  }
+    }).format(price);
+  };
 
   const { data: publishedIds } = useScaffoldReadContract({
     contractName: "RealMintMarketplace",
     functionName: "assetsPublishedBy",
     args: [address, undefined],
-  })
+  });
 
   const { data: allAssets } = useScaffoldReadContract({
     contractName: "RealMintMarketplace",
     functionName: "getAllAssets",
-  })
+  });
 
-  useEffect(() => {
-    const fetchOwnedAssets = async () => {
-      if (!allAssets || !address) return
+  // useEffect(() => {
+  //   const fetchOwnedAssets = async () => {
+  //     if (!allAssets || !address) return;
 
-      const owned: any[] = []
+  //     const owned: any[] = [];
 
-      for (const asset of allAssets) {
-        const { data: tokens } = await useScaffoldReadContract({
-          contractName: "RealMintMarketplace",
-          functionName: "tokensOwnedByUser",
-          args: [address, asset.id],
-        })
+  //     for (const asset of allAssets) {
+  //       const { data: tokens } = await useScaffoldReadContract({
+  //         contractName: "RealMintMarketplace",
+  //         functionName: "tokensOwnedByUser",
+  //         args: [address, asset.id],
+  //       });
 
-        if (tokens && Number(tokens) > 0) {
-          owned.push(asset)
-        }
-      }
+  //       if (tokens && Number(tokens) > 0) {
+  //         owned.push(asset);
+  //       }
+  //     }
 
-      setOwnedAssets(owned)
-    }
+  //     setOwnedAssets(owned);
+  //   };
 
-    fetchOwnedAssets()
-  }, [allAssets, address])
+  //   fetchOwnedAssets();
+  // }, [allAssets, address]);
 
-  const publishedCount = publishedIds?.length || 0
-  const soldCount = allAssets?.filter(
-    asset =>
-      asset.seller.toLowerCase() === address?.toLowerCase() &&
-      Number(asset.tokensAvailable) === 0
-  ).length || 0
+  const publishedCount = publishedIds || 0;
+  const soldCount =
+    allAssets?.filter(
+      asset => asset.seller.toLowerCase() === address?.toLowerCase() && Number(asset.tokensAvailable) === 0,
+    ).length || 0;
 
   return (
     <div className="min-h-screen bg-primary">
       <div className="container mx-auto px-6 py-8">
-
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 mb-8">
           <div className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300">
@@ -128,10 +120,7 @@ export default function ProfilePage() {
             >
               Purchased
             </button>
-            <button
-              className={`tab ${activeTab === "sold" ? "tab-active" : ""}`}
-              onClick={() => setActiveTab("sold")}
-            >
+            <button className={`tab ${activeTab === "sold" ? "tab-active" : ""}`} onClick={() => setActiveTab("sold")}>
               Sold
             </button>
           </div>
@@ -305,11 +294,11 @@ export default function ProfilePage() {
             </div>
           )}
                 */}
-                  </div>
-                </div>
+              </div>
+            </div>
           )}
         </div>
       </div>
     </div>
-  )
+  );
 }
