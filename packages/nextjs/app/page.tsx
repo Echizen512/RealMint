@@ -16,7 +16,7 @@ export default function MarketplacePage() {
 
   const { address: connectedAddress } = useAccount();
   const { address } = useAccount();
-  
+
   const { data: nativeBalance } = useBalance({
     address,
   });
@@ -25,8 +25,6 @@ export default function MarketplacePage() {
     contractName: "RwaForge",
     functionName: "getAllAssets",
   });
-
-
 
   const { writeContractAsync: writeRwaContractAsync } = useScaffoldWriteContract("RwaForge");
 

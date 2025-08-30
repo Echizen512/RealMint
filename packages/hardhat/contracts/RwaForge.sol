@@ -82,7 +82,8 @@ contract RwaForge is Ownable {
         require(msg.value == totalCost, "Incorrect ETH amount sent");
 
         // Transfer ETH to the seller
-        payable(asset.seller).transfer(msg.value);
+        (bool sent, ) = asset.seller.call{ value: msg.value }("");
+        require(sent, "ETH transfer failed");
 
         asset.tokensAvailable -= amount;
 
@@ -128,5 +129,4 @@ contract RwaForge is Ownable {
     function getPublishedAssets(address user) external view returns (uint256[] memory) {
         return assetsPublishedBy[user];
     }
-
 }
