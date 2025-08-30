@@ -2,7 +2,17 @@
 
 import React from "react";
 import Link from "next/link";
-import { ExternalLink, Hammer, HeartHandshake, Home, Info, Lightbulb, Target, Upload, User } from "lucide-react";
+import {
+  ExternalLink,
+  Hammer,
+  HeartHandshake,
+  Home,
+  Info,
+  Lightbulb,
+  Target,
+  Upload,
+  User,
+} from "lucide-react";
 
 export default function AboutPage() {
   return (
@@ -12,10 +22,10 @@ export default function AboutPage() {
           <div>
             <h1 className="text-4xl font-bold text-primary flex items-center gap-2">
               <Info className="w-6 h-6" />
-              Welcome to RealMint
+              Welcome to RWS-Forge
             </h1>
             <p className="py-4 text-base-content">
-              RealMint is a modular Web3 marketplace for buying and selling tokenized real-world assets (RWAs). Built
+              RWS-Forge is a modular Web3 marketplace for buying and selling tokenized real-world assets (RWAs). Built
               with Scaffold ETH 2, Circle, Base, and V0, it delivers a premium user experience with robust smart
               contract logic and immersive UI.
             </p>
@@ -71,7 +81,7 @@ export default function AboutPage() {
         </div>
         <div className="collapse-content">
           <p>
-            RealMint is a dApp that enables users to tokenize, publish, and trade real-world assets on-chain. It bridges
+            RWS-Forge is a dApp that enables users to tokenize, publish, and trade real-world assets on-chain. It bridges
             physical ownership and digital liquidity using Ethereum L2 scalability and stablecoin integration.
           </p>
         </div>
