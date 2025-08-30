@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import { parseEther } from "viem";
+import { useBalance } from "wagmi";
 import { useAccount } from "wagmi";
 import { useScaffoldReadContract } from "~~/hooks/scaffold-eth/useScaffoldReadContract";
 import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth/useScaffoldWriteContract";
@@ -15,11 +15,18 @@ export default function MarketplacePage() {
   const [sortBy, setSortBy] = useState("price-low");
 
   const { address: connectedAddress } = useAccount();
+  const { address } = useAccount();
+  
+  const { data: nativeBalance } = useBalance({
+    address,
+  });
 
   const { data: assets } = useScaffoldReadContract({
     contractName: "RwaForge",
     functionName: "getAllAssets",
   });
+
+
 
   const { writeContractAsync: writeRwaContractAsync } = useScaffoldWriteContract("RwaForge");
 
@@ -155,12 +162,21 @@ export default function MarketplacePage() {
                       const pricePerToken = asset.price / BigInt(asset.tokenSupply);
                       const totalCost = pricePerToken * BigInt(1);
 
-                      console.log(totalCost);
-                      await writeRwaContractAsync({
-                        functionName: "buyTokens",
-                        args: [BigInt(asset.id), BigInt(1)],
-                        value: totalCost,
-                      });
+                      if (!nativeBalance || nativeBalance.value < totalCost) {
+                        alert("Insufficient funds to complete this purchase.");
+                        return;
+                      }
+
+                      try {
+                        await writeRwaContractAsync({
+                          functionName: "buyTokens",
+                          args: [BigInt(asset.id), BigInt(1)],
+                          value: totalCost,
+                        });
+                      } catch (err) {
+                        console.error("Purchase failed:", err);
+                        alert("Transaction failed. Please try again.");
+                      }
                     }}
                   >
                     {canBuy ? "Buy Tokens" : isSeller ? "Your Asset" : "Sold Out"}
