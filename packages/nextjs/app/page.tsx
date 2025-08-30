@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
+import { parseEther } from "viem";
 import { useAccount } from "wagmi";
 import { useScaffoldReadContract } from "~~/hooks/scaffold-eth/useScaffoldReadContract";
 import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth/useScaffoldWriteContract";
@@ -20,7 +21,7 @@ export default function MarketplacePage() {
     functionName: "getAllAssets",
   });
 
-  const { writeContractAsync: buyTokens } = useScaffoldWriteContract("RealMintMarketplace");
+  const { writeContractAsync: writeRealMintMarketContractAsync } = useScaffoldWriteContract("RealMintMarketplace");
 
   const filteredAssets = useMemo(() => {
     if (!assets) return [];
@@ -150,19 +151,16 @@ export default function MarketplacePage() {
                   <button
                     className="btn btn-primary w-full"
                     disabled={!canBuy}
-                    onClick={() => {
+                    onClick={async () => {
                       const pricePerToken = asset.price / BigInt(asset.tokenSupply);
                       const totalCost = pricePerToken * BigInt(1);
 
-                      buyTokens(
-                        {
-                          functionName: "buyTokens",
-                          args: [BigInt(asset.id), BigInt(1)],
-                        },
-                        {
-                          value: totalCost,
-                        }
-                      );
+                      console.log(totalCost);
+                      await writeRealMintMarketContractAsync({
+                        functionName: "buyTokens",
+                        args: [BigInt(asset.id), BigInt(1)],
+                        value: parseEther(totalCost.toString()),
+                      });
                     }}
                   >
                     {canBuy ? "Buy Tokens" : isSeller ? "Your Asset" : "Sold Out"}

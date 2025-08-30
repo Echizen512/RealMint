@@ -9,7 +9,6 @@ interface GradientTextProps {
 }
 
 <style jsx>
-  {" "}
   {`
     .animated-gradient-text {
       position: relative;
