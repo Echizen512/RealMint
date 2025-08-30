@@ -66,12 +66,20 @@ contract RealMintMarketplace is Ownable {
         nextAssetId++;
     }
 
-    function buyTokens(uint256 assetId, uint256 amount) external {
+    function buyTokens(uint256 assetId, uint256 amount) external payable {
         Asset storage asset = assets[assetId];
         require(asset.seller != address(0), "Asset does not exist");
         require(asset.isActive, "Asset not active");
         require(amount > 0 && amount <= asset.tokensAvailable, "Invalid amount");
         require(asset.tokenSupply > 0, "Invalid token supply");
+
+        uint256 pricePerToken = asset.price / asset.tokenSupply;
+        uint256 totalCost = pricePerToken * amount;
+
+        require(msg.value == totalCost, "Incorrect ETH amount sent");
+
+        // Transfer ETH to the seller
+        payable(asset.seller).transfer(msg.value);
 
         asset.tokensAvailable -= amount;
 
