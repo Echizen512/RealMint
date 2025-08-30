@@ -234,7 +234,7 @@ export default function PublishPage() {
               Your asset has been submitted for review and will be available in the marketplace soon.
             </p>
             <div className="card-actions justify-center">
-              <Link href="/marketplace" className="btn btn-primary">
+              <Link href="/" className="btn btn-primary">
                 View Marketplace
               </Link>
             </div>
