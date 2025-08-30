@@ -2,7 +2,17 @@
 
 import React from "react";
 import Link from "next/link";
-import { ExternalLink, Hammer, HeartHandshake, Home, Info, Lightbulb, Target, Upload, User } from "lucide-react";
+import {
+  ExternalLink,
+  Hammer,
+  HeartHandshake,
+  Home,
+  Info,
+  Lightbulb,
+  Target,
+  Upload,
+  User,
+} from "lucide-react";
 
 export default function AboutPage() {
   return (
@@ -10,14 +20,14 @@ export default function AboutPage() {
       <div className="hero bg-base-200 rounded-xl mb-6">
         <div className="hero-content flex-col lg:flex-row">
           <div>
-            <h1 className="text-4xl font-bold text-primary flex items-center gap-2">
+            <h1 className="text-4xl font-bold flex items-center gap-2">
               <Info className="w-6 h-6" />
               Welcome to RWS-Forge
             </h1>
             <p className="py-4 text-base-content">
               RWS-Forge is a modular Web3 marketplace for buying and selling tokenized real-world assets (RWAs). Built
-              with Scaffold ETH 2, Circle, Base, and V0, it delivers a premium user experience with robust smart
-              contract logic and immersive UI.
+              with Scaffold ETH 2, Base, and V0, it delivers a premium user experience with robust smart contract logic
+              and immersive UI.
             </p>
             <Link href="/" className="btn btn-primary mt-2">
               <Home className="w-4 h-4 mr-2" />
@@ -72,7 +82,7 @@ export default function AboutPage() {
         <div className="collapse-content">
           <p>
             RWS-Forge is a dApp that enables users to tokenize, publish, and trade real-world assets on-chain. It
-            bridges physical ownership and digital liquidity using Ethereum L2 scalability and stablecoin integration.
+            bridges physical ownership and digital liquidity using Ethereum L2 scalability.
           </p>
         </div>
       </div>
@@ -89,7 +99,6 @@ export default function AboutPage() {
             <li>Trustless peer-to-peer trading</li>
             <li>Composable architecture for future modules</li>
             <li>Premium UI powered by DaisyUI and V0</li>
-            <li>Stablecoin payments via Circle (USDC)</li>
             <li>Fast, low-cost transactions on Base</li>
           </ul>
         </div>
@@ -106,7 +115,6 @@ export default function AboutPage() {
             <li>Fully on-chain marketplace for RWAs</li>
             <li>Frontend synced with contract state</li>
             <li>Premium UI with animated components</li>
-            <li>Stablecoin integration via Circle</li>
             <li>Modular architecture for future upgrades</li>
             <li>Optimized DX with Scaffold ETH 2</li>
           </ul>
@@ -124,7 +132,6 @@ export default function AboutPage() {
             <li>Solidity + Hardhat + Typechain</li>
             <li>React + TypeScript + DaisyUI + V0</li>
             <li>Base (L2) + Ethereum</li>
-            <li>Circle (USDC)</li>
             <li>Scaffold ETH 2 + RainbowKit</li>
             <li>Lucide React for iconography</li>
           </ul>
@@ -143,7 +150,8 @@ export default function AboutPage() {
               <span className="font-semibold">Live dApp:</span> <code></code>
             </li>
             <li>
-              <span className="font-semibold">GitHub Repo:</span> <code>https://github.c</code>
+              <span className="font-semibold">GitHub Repo:</span>{" "}
+              <code>https://github.com/Echizen512/rws-forge</code>
             </li>
             <li>
               <span className="font-semibold">Devpost:</span> <code></code>
