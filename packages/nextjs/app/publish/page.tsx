@@ -1,32 +1,32 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState } from "react"
-import Link from "next/link"
-import { Upload, X, CheckCircle, AlertCircle, DollarSign, ImageIcon } from "lucide-react"
+import type React from "react";
+import { useState } from "react";
+import Link from "next/link";
+import { AlertCircle, CheckCircle, DollarSign, ImageIcon, Upload, X } from "lucide-react";
 
-const categories = ["Real Estate", "Collectibles", "Commodities", "Vehicles", "Art", "Other"]
+const categories = ["Real Estate", "Collectibles", "Commodities", "Vehicles", "Art", "Other"];
 
 interface FormData {
-  title: string
-  description: string
-  category: string
-  location: string
-  price: string
-  totalTokens: string
-  images: File[]
-  terms: boolean
+  title: string;
+  description: string;
+  category: string;
+  location: string;
+  price: string;
+  totalTokens: string;
+  images: File[];
+  terms: boolean;
 }
 
 interface FormErrors {
-  title?: string
-  description?: string
-  category?: string
-  location?: string
-  price?: string
-  totalTokens?: string
-  images?: string
-  terms?: string
+  title?: string;
+  description?: string;
+  category?: string;
+  location?: string;
+  price?: string;
+  totalTokens?: string;
+  images?: string;
+  terms?: string;
 }
 
 export default function PublishPage() {
@@ -39,127 +39,148 @@ export default function PublishPage() {
     totalTokens: "",
     images: [],
     terms: false,
-  })
+  });
 
-  const [errors, setErrors] = useState<FormErrors>({})
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSuccess, setIsSuccess] = useState(false)
-  const [dragActive, setDragActive] = useState(false)
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
 
   const validateForm = (): boolean => {
-    const newErrors: FormErrors = {}
+    const newErrors: FormErrors = {};
 
     if (!formData.title.trim()) {
-      newErrors.title = "Asset title is required"
+      newErrors.title = "Asset title is required";
     } else if (formData.title.length < 5) {
-      newErrors.title = "Title must be at least 5 characters"
+      newErrors.title = "Title must be at least 5 characters";
     }
 
     if (!formData.description.trim()) {
-      newErrors.description = "Description is required"
+      newErrors.description = "Description is required";
     } else if (formData.description.length < 20) {
-      newErrors.description = "Description must be at least 20 characters"
+      newErrors.description = "Description must be at least 20 characters";
     }
 
     if (!formData.category) {
-      newErrors.category = "Please select a category"
+      newErrors.category = "Please select a category";
     }
 
     if (!formData.location.trim()) {
-      newErrors.location = "Location is required"
+      newErrors.location = "Location is required";
     }
 
     if (!formData.price) {
-      newErrors.price = "Price is required"
+      newErrors.price = "Price is required";
     } else if (Number.parseFloat(formData.price) <= 0) {
-      newErrors.price = "Price must be greater than 0"
+      newErrors.price = "Price must be greater than 0";
     }
 
     if (!formData.totalTokens) {
-      newErrors.totalTokens = "Total tokens is required"
+      newErrors.totalTokens = "Total tokens is required";
     } else if (Number.parseInt(formData.totalTokens) <= 0) {
-      newErrors.totalTokens = "Total tokens must be greater than 0"
+      newErrors.totalTokens = "Total tokens must be greater than 0";
     }
 
     if (formData.images.length === 0) {
-      newErrors.images = "At least one image is required"
+      newErrors.images = "At least one image is required";
     }
 
     if (!formData.terms) {
-      newErrors.terms = "You must agree to the terms and conditions"
+      newErrors.terms = "You must agree to the terms and conditions";
     }
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleInputChange = (field: keyof FormData, value: string | boolean) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
+    setFormData(prev => ({ ...prev, [field]: value }));
     // Clear error when user starts typing
     if (errors[field as keyof FormErrors]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }))
+      setErrors(prev => ({ ...prev, [field]: undefined }));
     }
-  }
+  };
 
   const handleImageUpload = (files: FileList | null) => {
-    if (!files) return
+    if (!files) return;
 
-    const newImages = Array.from(files).filter((file) => {
-      return file.type.startsWith("image/") && file.size <= 10 * 1024 * 1024 // 10MB limit
-    })
+    const newImages = Array.from(files).filter(file => {
+      return file.type.startsWith("image/") && file.size <= 10 * 1024 * 1024; // 10MB limit
+    });
 
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       images: [...prev.images, ...newImages].slice(0, 5), // Max 5 images
-    }))
+    }));
 
     if (errors.images) {
-      setErrors((prev) => ({ ...prev, images: undefined }))
+      setErrors(prev => ({ ...prev, images: undefined }));
     }
-  }
+  };
 
   const removeImage = (index: number) => {
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       images: prev.images.filter((_, i) => i !== index),
-    }))
-  }
+    }));
+  };
 
   const handleDrag = (e: React.DragEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
+    e.preventDefault();
+    e.stopPropagation();
     if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true)
+      setDragActive(true);
     } else if (e.type === "dragleave") {
-      setDragActive(false)
+      setDragActive(false);
     }
-  }
+  };
 
   const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setDragActive(false)
-    handleImageUpload(e.dataTransfer.files)
-  }
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    handleImageUpload(e.dataTransfer.files);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!validateForm()) {
-      return
+      return;
     }
 
-    setIsSubmitting(true)
+    setIsSubmitting(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    try {
+      const uploadedImageUrls: string[] = [];
 
-    setIsSubmitting(false)
-    setIsSuccess(true)
+      // Subir cada imagen al backend
+      for (const imageFile of formData.images) {
+        const imageFormData = new FormData();
+        imageFormData.append("file", imageFile);
 
-    // Reset form after success
+        const response = await fetch("/api/upload-asset-image", {
+          method: "POST",
+          body: imageFormData,
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to upload image");
+        }
+
+        const result = await response.json();
+        console.log(result);
+        uploadedImageUrls.push(result.url);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+
+    setIsSubmitting(false);
+    setIsSuccess(true);
+
     setTimeout(() => {
-      setIsSuccess(false)
+      setIsSuccess(false);
       setFormData({
         title: "",
         description: "",
@@ -169,20 +190,20 @@ export default function PublishPage() {
         totalTokens: "",
         images: [],
         terms: false,
-      })
-    }, 3000)
-  }
+      });
+    }, 3000);
+  };
 
   const formatPrice = (price: string) => {
-    const num = Number.parseFloat(price)
-    if (isNaN(num)) return ""
+    const num = Number.parseFloat(price);
+    if (isNaN(num)) return "";
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-    }).format(num)
-  }
+    }).format(num);
+  };
 
   if (isSuccess) {
     return (
@@ -202,12 +223,11 @@ export default function PublishPage() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
     <div className="min-h-screen bg-primary">
-
       <div className="container mx-auto px-6 py-8 max-w-4xl">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-base-content mb-2">Publish Asset</h1>
@@ -232,7 +252,7 @@ export default function PublishPage() {
                       id="title"
                       type="text"
                       value={formData.title}
-                      onChange={(e) => handleInputChange("title", e.target.value)}
+                      onChange={e => handleInputChange("title", e.target.value)}
                       placeholder="e.g., Manhattan Luxury Apartment"
                       className={`input input-bordered w-full ${errors.title ? "input-error" : ""}`}
                     />
@@ -253,11 +273,11 @@ export default function PublishPage() {
                     <select
                       id="category"
                       value={formData.category}
-                      onChange={(e) => handleInputChange("category", e.target.value)}
+                      onChange={e => handleInputChange("category", e.target.value)}
                       className={`select select-bordered w-full ${errors.category ? "select-error" : ""}`}
                     >
                       <option value="">Select a category</option>
-                      {categories.map((cat) => (
+                      {categories.map(cat => (
                         <option key={cat} value={cat}>
                           {cat}
                         </option>
@@ -281,7 +301,7 @@ export default function PublishPage() {
                   <textarea
                     id="description"
                     value={formData.description}
-                    onChange={(e) => handleInputChange("description", e.target.value)}
+                    onChange={e => handleInputChange("description", e.target.value)}
                     placeholder="Provide a detailed description of your asset..."
                     rows={4}
                     className={`textarea textarea-bordered w-full ${errors.description ? "textarea-error" : ""}`}
@@ -305,7 +325,7 @@ export default function PublishPage() {
                     id="location"
                     type="text"
                     value={formData.location}
-                    onChange={(e) => handleInputChange("location", e.target.value)}
+                    onChange={e => handleInputChange("location", e.target.value)}
                     placeholder="e.g., New York, NY"
                     className={`input input-bordered w-full ${errors.location ? "input-error" : ""}`}
                   />
@@ -339,7 +359,7 @@ export default function PublishPage() {
                       id="price"
                       type="number"
                       value={formData.price}
-                      onChange={(e) => handleInputChange("price", e.target.value)}
+                      onChange={e => handleInputChange("price", e.target.value)}
                       placeholder="0"
                       className={`input input-bordered w-full ${errors.price ? "input-error" : ""}`}
                     />
@@ -366,7 +386,7 @@ export default function PublishPage() {
                       id="totalTokens"
                       type="number"
                       value={formData.totalTokens}
-                      onChange={(e) => handleInputChange("totalTokens", e.target.value)}
+                      onChange={e => handleInputChange("totalTokens", e.target.value)}
                       placeholder="1000"
                       className={`input input-bordered w-full ${errors.totalTokens ? "input-error" : ""}`}
                     />
@@ -424,7 +444,7 @@ export default function PublishPage() {
                     type="file"
                     multiple
                     accept="image/*"
-                    onChange={(e) => handleImageUpload(e.target.files)}
+                    onChange={e => handleImageUpload(e.target.files)}
                     className="hidden"
                     id="image-upload"
                   />
@@ -474,7 +494,7 @@ export default function PublishPage() {
                       type="checkbox"
                       id="terms"
                       checked={formData.terms}
-                      onChange={(e) => handleInputChange("terms", e.target.checked)}
+                      onChange={e => handleInputChange("terms", e.target.checked)}
                       className="checkbox checkbox-primary"
                     />
                     <span className="label-text">
@@ -515,5 +535,5 @@ export default function PublishPage() {
         </form>
       </div>
     </div>
-  )
+  );
 }
