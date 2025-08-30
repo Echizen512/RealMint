@@ -3,7 +3,6 @@
 import { Coin3d } from "./Coin3d";
 import { CreateParticles } from "./CreateParticles";
 import { RainbowKitCustomConnectButton } from "./scaffold-eth";
-import GradientText from "./ui/GradientText";
 import RotatingText from "./ui/RotatingText";
 import { DollarSign, LineChart, PackageSearch, ShieldCheck, Store, Wallet } from "lucide-react";
 
@@ -34,26 +33,26 @@ export const LandingPage = () => {
       <section className="h-screen w-screen flex justify-center items-center flex-col">
         <div>
           <h1 className="flex flex-col gap-6">
-            <span>
-              <GradientText
+            <span> The Future
+             {/* <GradientText
                 colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
                 animationSpeed={3}
                 showBorder={false}
                 className="text-6xl md:text-8xl font-bold mb-6"
-              >
-                The Future
-              </GradientText>
+              > 
+                
+             {/* </GradientText> */}
             </span>
 
-            <span>
-              <GradientText
+            <span> of Real Assets
+             {/* <GradientText
                 colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
                 animationSpeed={3}
                 showBorder={false}
                 className="text-6xl md:text-8xl font-bold"
               >
                 of Real Assets
-              </GradientText>
+              </GradientText> */}
             </span>
           </h1>
         </div>
