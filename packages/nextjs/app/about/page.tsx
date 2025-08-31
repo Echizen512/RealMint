@@ -2,17 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import {
-  ExternalLink,
-  Hammer,
-  HeartHandshake,
-  Home,
-  Info,
-  Lightbulb,
-  Target,
-  Upload,
-  User,
-} from "lucide-react";
+import { ExternalLink, Hammer, HeartHandshake, Home, Info, Lightbulb, Target, Upload, User } from "lucide-react";
 
 export default function AboutPage() {
   return (
@@ -150,8 +140,7 @@ export default function AboutPage() {
               <span className="font-semibold">Live dApp:</span> <code></code>
             </li>
             <li>
-              <span className="font-semibold">GitHub Repo:</span>{" "}
-              <code>https://github.com/Echizen512/rws-forge</code>
+              <span className="font-semibold">GitHub Repo:</span> <code>https://github.com/Echizen512/rws-forge</code>
             </li>
             <li>
               <span className="font-semibold">Devpost:</span> <code></code>

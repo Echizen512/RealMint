@@ -6,9 +6,10 @@ import { useAccount } from "wagmi";
 import { useScaffoldReadContract } from "~~/hooks/scaffold-eth/useScaffoldReadContract";
 
 export default function ProfilePage() {
+  const { address } = useAccount();
+
   //states
   const [activeTab, setActiveTab] = useState("published");
-  const { address } = useAccount();
 
   // const formatPrice = (price: number) => {
   //   return new Intl.NumberFormat("en-US", {
