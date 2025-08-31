@@ -133,14 +133,14 @@ export default function ProfilePage() {
             >
               Purchased
             </button>
-            <button
+            {/* <button
               className={`tab text-sm font-medium px-6 py-2 transition-all duration-200 ${
                 activeTab === "sold" ? "tab-active bg-primary text-primary-content" : ""
               }`}
               onClick={() => setActiveTab("sold")}
             >
               Sold
-            </button>
+            </button> */}
           </div>
         </div>
 
