@@ -174,7 +174,6 @@ export default function PublishPage() {
         }
 
         const result = await response.json();
-        console.log(result);
         uploadedImageUrls.push(result.url);
       }
 

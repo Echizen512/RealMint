@@ -28,7 +28,9 @@ export default function MarketplacePage() {
     functionName: "getAllAssets",
   });
 
-  const { writeContractAsync: writeRwaContractAsync } = useScaffoldWriteContract("RwaForge");
+  const { writeContractAsync: writeRwaContractAsync } = useScaffoldWriteContract({
+    contractName: "RwaForge",
+  });
 
   const filteredAssets = useMemo(() => {
     if (!assets) return [];
