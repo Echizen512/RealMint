@@ -101,7 +101,7 @@ export const Header = () => {
             <Image alt="RWA logo" className="cursor-pointer" fill src="/logo.png" />
           </div>
           <div className="flex flex-col">
-            <span className="font-bold leading-tight">RWA Forge</span>
+            <span className="font-bold leading-tight">RWS Forge</span>
             {/* <span className="text-xs">Ethereum dev stack</span> */}
           </div>
         </Link>
