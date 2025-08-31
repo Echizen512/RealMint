@@ -1,5 +1,9 @@
 # 🟢 RWS-Forge
 
+<p align="center">
+  <img width="400" height="400" alt="favicon" src="https://github.com/user-attachments/assets/5458ae68-fc75-471c-b924-468699b95e07" />
+</p>
+
 **RWS-Forge** is a modular Web3 marketplace for buying and selling tokenized real-world assets (RWAs). Built with Scaffold ETH 2 and Base, it delivers a premium user experience with robust smart contract logic and a visually immersive frontend powered by V0.
 
 ---
@@ -80,19 +84,18 @@ RWS-Forge includes smart contract testing using **Hardhat** and **Chai**, ensuri
 
 | Resource         | Link (to be added)                  |
 |------------------|-------------------------------------|
-| Live dApp        | ``              |
+| Live dApp        | `https://rws-forge.vercel.app` |
 | GitHub Repo      | `https://github.com/Echizen512/rws-forge` |
-| Demo Video       | `https://rws-forge.vercel.app/` |
-| Contract Address | `0x...`                             |
-| Explorer         | `` |
-
-
+| Demo Video       |`https://www.youtube.com/watch?v=00AnODhJCPk&feature=youtu.be` |
+| Contract Address | `0x9027237B996ee70B77b058A5c0Ca640Fc62BAf5d` |
+| Block Explorer   | `https://sepolia.basescan.org/address/0x9027237b996ee70b77b058a5c0ca640fc62baf5d` |
+| Testing Script   | `https://github.com/Echizen512/rws-forge/blob/master/packages/hardhat/test/RwaForge.ts` |
 ---
 
 ## 🚀 Installation
 
 ```bash
-git clone 
+git clone [repo-url]
 cd rws-forge
-pnpm install
-pnpm dev
+yarn install
+yarn start
