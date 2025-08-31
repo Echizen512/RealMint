@@ -21,11 +21,6 @@ export default function ProfilePage() {
   // };
 
   //smart contract
-  const { data: publishedIds } = useScaffoldReadContract({
-    contractName: "RwaForge",
-    functionName: "getAllAssets",
-  });
-
   const { data: allAssets } = useScaffoldReadContract({
     contractName: "RwaForge",
     functionName: "getAllAssets",
@@ -37,13 +32,12 @@ export default function ProfilePage() {
     args: [address],
   });
 
-  const { data: publishedAssets } = useScaffoldReadContract({
+  const { data: allPublishedAssets } = useScaffoldReadContract({
     contractName: "RwaForge",
     functionName: "getAllPublishedAssets",
     args: [address],
   });
 
-  const publishedCount = Array.isArray(publishedIds) ? publishedIds.length : 0;
   const soldCount =
     allAssets?.filter(
       asset => asset.seller.toLowerCase() === address?.toLowerCase() && Number(asset.tokensAvailable) === 0,
@@ -75,7 +69,14 @@ export default function ProfilePage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm opacity-70">Assets Published</p>
-                  <p className="text-2xl font-bold">{publishedCount}</p>
+                  {allPublishedAssets === undefined ? (
+                    <div className="h-8 w-20 skeleton" />
+                  ) : (
+                    <p className="text-2xl font-bold">
+                      {allPublishedAssets[0].seller.includes("0x000000000000000000000") ? 0 : allPublishedAssets.length}
+                    </p>
+                  )}
+
                   <p className="text-xs opacity-60">Listed by you</p>
                 </div>
                 <BarChart3 className="h-8 w-8" />
@@ -154,10 +155,12 @@ export default function ProfilePage() {
                 </h2>
 
                 <div className="space-y-4">
-                  {publishedAssets === undefined ? (
+                  {allPublishedAssets === undefined ? (
                     <div className="w-full h-20 skeleton" />
+                  ) : allPublishedAssets[0].seller.includes("0x000000000000000000000") ? (
+                    <p className="text-center font-semibold text-neutral/80">You have no published products.</p>
                   ) : (
-                    publishedAssets.map(x => (
+                    allPublishedAssets.map(x => (
                       <div key={x.id} className="flex items-center justify-between p-3 bg-base-200 rounded-lg">
                         <div>
                           <p className="font-medium">{x.title}</p>
