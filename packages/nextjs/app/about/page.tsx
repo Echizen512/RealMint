@@ -137,22 +137,10 @@ export default function AboutPage() {
         <div className="collapse-content">
           <ul className="list-disc list-inside">
             <li>
-              <span className="font-semibold">Live dApp:</span> <code></code>
-            </li>
-            <li>
               <span className="font-semibold">GitHub Repo:</span> <code>https://github.com/Echizen512/rws-forge</code>
             </li>
             <li>
-              <span className="font-semibold">Devpost:</span> <code></code>
-            </li>
-            <li>
-              <span className="font-semibold">Demo Video:</span> <code></code>
-            </li>
-            <li>
-              <span className="font-semibold">Contract Address:</span> <code>0x...</code>
-            </li>
-            <li>
-              <span className="font-semibold">Explorer:</span> <code></code>
+              <span className="font-semibold">Explorer:</span> <code>https://sepolia.basescan.org/address/0x9027237b996ee70b77b058a5c0ca640fc62baf5d</code>
             </li>
           </ul>
         </div>
