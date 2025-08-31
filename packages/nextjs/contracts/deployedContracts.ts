@@ -694,7 +694,7 @@ const deployedContracts = {
   },
   84532: {
     RwaForge: {
-      address: "0x7D4d61524590899C72015E68213a34AC61c0CD76",
+      address: "0x0FD5D057a9570F00611602B3cf58D707C9aD85C4",
       abi: [
         {
           inputs: [],
@@ -1376,7 +1376,7 @@ const deployedContracts = {
         renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
       },
-      deployedOnBlock: 30415044,
+      deployedOnBlock: 30417361,
     },
   },
 } as const;
