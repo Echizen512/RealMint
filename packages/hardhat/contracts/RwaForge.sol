@@ -17,6 +17,7 @@ contract RwaForge is Ownable {
         uint256 tokenSupply;
         uint256 tokensAvailable;
         bool isActive;
+        uint256 date;
     }
 
     struct AssetPurchased {
@@ -75,7 +76,8 @@ contract RwaForge is Ownable {
             price: price,
             tokenSupply: tokenSupply,
             tokensAvailable: tokenSupply,
-            isActive: true
+            isActive: true,
+            date: block.timestamp
         });
 
         assetsPublishedBy[msg.sender].push(nextAssetId);
